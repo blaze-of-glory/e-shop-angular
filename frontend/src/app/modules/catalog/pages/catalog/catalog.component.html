@@ -1,43 +1,8 @@
-<h1 class="text-center">{{pageTitle}}</h1>
+<h1 class="text-center">{{title}}</h1>
 <div class="container text-center">
-  <div class="row" [ngSwitch]="catalogType">
-    <ng-template ngSwitchCase="employees">
-      <div *ngFor="let employee of employeesList" class="col-3 mb-3">
-        <div class="card" style="width: 18rem;">
-          <img [src]="employee?.img" alt="Фото сотрудника" class="card-img-top">
-          <div class="card-body">
-            <h5 class="card-title" [routerLink]="employee.id">{{employee.name}} {{employee.surname}}</h5>
-            <div class="d-flex justify-content-center mt-3">
-              <button class="btn btn-primary" (click)="edit(employee)">Редактировать</button>
-              <button class="btn btn-danger" (click)="delete(employee.id)">Удалить</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <button [routerLink]="ROUTER_LINKS.ADD + '/employee'" class="btn btn-success ms-2 add">+</button>
-      </div>
-    </ng-template>
-    <ng-template ngSwitchCase="shops">
-      <div *ngFor="let shop of shopsList" class="col-3 mb-3">
-        <div class="card" style="width: 18rem;">
-          <img [src]="shop?.img" alt="Фото магазина" class="card-img-top">
-          <div class="card-body">
-            <p>Адресс: {{shop.address}}</p>
-            <h5 class="card-title">с {{ shop.openTime.slice(0, 5) }} до {{ shop.closeTime.slice(0, 5) }}</h5>
-            <div class="d-flex justify-content-center mt-3">
-              <button class="btn btn-primary" (click)="edit(shop)">Редактировать</button>
-              <button class="btn btn-danger" (click)="delete(shop.id)">Удалить</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <button [routerLink]="ROUTER_LINKS.ADD + '/shop'" class="btn btn-success ms-2 add">+</button>
-      </div>
-    </ng-template>
-    <ng-template ngSwitchCase="providers">
-      <div *ngFor="let provider of providersList" class="col-3 mb-3">
+  <div class="row">
+    <ng-template [ngIf]="providers">
+      <div *ngFor="let provider of providers" class="col-3 mb-3">
         <div class="card" style="width: 18rem;">
           <img [src]="provider?.img" alt="Логотип поставщика" class="card-img-top">
           <div class="card-body">
@@ -54,8 +19,8 @@
         <button [routerLink]="ROUTER_LINKS.ADD + '/provider'" class="btn btn-success ms-2 add">+</button>
       </div>
     </ng-template>
-    <ng-template ngSwitchCase="materials">
-      <div *ngFor="let material of materialsList" class="col-3 mb-3">
+    <ng-template [ngIf]="materials">
+      <div *ngFor="let material of materials" class="col-3 mb-3">
         <div class="card" style="width: 18rem;">
           <img [src]="material?.img" alt="Фото материала" class="card-img-top">
           <div class="card-body">
@@ -71,8 +36,8 @@
         <button [routerLink]="ROUTER_LINKS.ADD + '/material'" class="btn btn-success ms-2 add">+</button>
       </div>
     </ng-template>
-    <ng-template ngSwitchCase="products">
-      <div *ngFor="let product of productsList" class="col-3 mb-3">
+    <ng-template [ngIf]="products">
+      <div *ngFor="let product of products" class="col-3 mb-3">
         <div class="card" style="width: 18rem;">
           <img [src]="product?.img" alt="Фото изделия" class="card-img-top">
           <div class="card-body">
@@ -87,6 +52,41 @@
       </div>
       <div>
         <button [routerLink]="ROUTER_LINKS.ADD + '/product'" class="btn btn-success ms-2 add">+</button>
+      </div>
+    </ng-template>
+    <ng-template [ngIf]="employees">
+      <div *ngFor="let employee of employees" class="col-3 mb-3">
+        <div class="card" style="width: 18rem;">
+          <img [src]="employee?.img" alt="Фото сотрудника" class="card-img-top">
+          <div class="card-body">
+            <h5 class="card-title" [routerLink]="employee.id">{{employee.name}} {{employee.surname}}</h5>
+            <div class="d-flex justify-content-center mt-3">
+              <button class="btn btn-primary" (click)="edit(employee)">Редактировать</button>
+              <button class="btn btn-danger" (click)="delete(employee.id)">Удалить</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button [routerLink]="ROUTER_LINKS.ADD + '/employee'" class="btn btn-success ms-2 add">+</button>
+      </div>
+    </ng-template>
+    <ng-template [ngIf]="shops">
+      <div *ngFor="let shop of shops" class="col-3 mb-3">
+        <div class="card" style="width: 18rem;">
+          <img [src]="shop?.img" alt="Фото магазина" class="card-img-top">
+          <div class="card-body">
+            <p>Адресс: {{shop.address}}</p>
+            <h5 class="card-title">с {{ shop.openTime.slice(0, 5) }} до {{ shop.closeTime.slice(0, 5) }}</h5>
+            <div class="d-flex justify-content-center mt-3">
+              <button class="btn btn-primary" (click)="edit(shop)">Редактировать</button>
+              <button class="btn btn-danger" (click)="delete(shop.id)">Удалить</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button [routerLink]="ROUTER_LINKS.ADD + '/shop'" class="btn btn-success ms-2 add">+</button>
       </div>
     </ng-template>
   </div>

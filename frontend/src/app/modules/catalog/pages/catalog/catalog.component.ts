@@ -16,14 +16,12 @@ import { ItemService } from "../../../../core/item.service";
   styleUrls: ['./catalog.component.scss']
 })
 export class CatalogComponent implements OnInit {
-  public pageTitle!: string;
-  public providersList!: Provider[];
-  public materialsList!: Material[];
-  public productsList!: Product[];
-  public employeesList!: Employee[];
-  public shopsList!: Shop[];
-  public catalogType!: 'providers' | 'materials' | 'products' | 'employees' | 'shops';
-
+  public title!: string;
+  public providers!: Provider[];
+  public materials!: Material[];
+  public products!: Product[];
+  public employees!: Employee[];
+  public shops!: Shop[];
   public readonly ROUTER_LINKS = ROUTER_LINKS;
 
   constructor(
@@ -34,69 +32,45 @@ export class CatalogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    switch (this.route.snapshot.routeConfig?.path) {
-      case ROUTER_NAMES.PROVIDERS : {
-        this.catalogType = 'providers';
-        this.pageTitle = 'Список поставщиков';
-        this.getAll();
-        break;
-      }
-      case ROUTER_NAMES.MATERIALS : {
-        this.catalogType = 'materials';
-        this.pageTitle = 'Список материалов';
-        this.getAll();
-        break;
-      }
-      case ROUTER_NAMES.PRODUCTS : {
-        this.catalogType = 'products';
-        this.pageTitle = 'Список изделий';
-        this.getAll();
-        break;
-      }
-      case ROUTER_NAMES.EMPLOYEES : {
-        this.catalogType = 'employees';
-        this.pageTitle = 'Список сотрудников';
-        this.getAll();
-        break;
-      }
-      case ROUTER_NAMES.SHOPS : {
-        this.catalogType = 'shops';
-        this.pageTitle = 'Список магазинов';
-        this.getAll();
-        break;
-      }
-    }
+    this.route.data.subscribe(resolvedData => {
+      this.providers = resolvedData['providers'];
+      this.materials = resolvedData['materials'];
+      this.products = resolvedData['products'];
+      this.employees = resolvedData['employees'];
+      this.shops = resolvedData['shops'];
+      this.title = resolvedData['title'];
+    });
   }
 
   private getAll() {
     switch (this.route.snapshot.routeConfig?.path) {
       case ROUTER_NAMES.PROVIDERS : {
         this.apiService.getAllProviders().subscribe(providers => {
-          this.providersList = providers;
+          this.providers = providers;
         });
         break;
       }
       case ROUTER_NAMES.MATERIALS : {
         this.apiService.getFilteredMaterials(this.route.snapshot.params['provider']).subscribe(materials => {
-          this.materialsList = materials;
+          this.materials = materials;
         });
         break;
       }
       case ROUTER_NAMES.PRODUCTS : {
         this.apiService.getFilteredProducts(this.route.snapshot.params['provider'],this.route.snapshot.params['material']).subscribe(products => {
-          this.productsList = products;
+          this.products = products;
         });
         break;
       }
       case ROUTER_NAMES.EMPLOYEES : {
         this.apiService.getAllEmployees().subscribe(employees => {
-          this.employeesList = employees;
+          this.employees = employees;
         });
         break;
       }
       case ROUTER_NAMES.SHOPS : {
         this.apiService.getAllShops().subscribe(shops => {
-          this.shopsList = shops;
+          this.shops = shops;
         });
         break;
       }
