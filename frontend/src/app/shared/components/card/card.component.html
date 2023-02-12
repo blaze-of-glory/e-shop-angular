@@ -1,0 +1,14 @@
+<ng-container [ngSwitch]="true">
+  <ng-template [ngSwitchCase]="!!employee">
+    <div class="card" style="width: 18rem;">
+      <img [src]="employee.img" alt="Фото сотрудника" class="card-img-top">
+      <div class="card-body">
+        <h5 class="card-title" (click)="openDetails(employee.id)">{{employee.name}} {{employee.surname}}</h5>
+        <div class="d-flex justify-content-center mt-3">
+          <button class="btn btn-primary" (click)="edit(employee.id)">Редактировать</button>
+          <button class="btn btn-danger" (click)="delete(employee.id)">Удалить</button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</ng-container>

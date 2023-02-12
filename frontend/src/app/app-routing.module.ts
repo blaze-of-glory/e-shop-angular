@@ -6,6 +6,7 @@ import { CatalogComponent } from "./modules/catalog/pages/catalog/catalog.compon
 import { ItemComponent } from "./modules/catalog/pages/item/item.component";
 import { ManipulateComponent } from "./modules/catalog/pages/manipulate/manipulate.component";
 import { CatalogResolver } from './core/resolvers/catalog.resolver';
+import { EmployeeListContainer } from './modules/employees/containers/employee-list/employee-list.container';
 
 const routes: Routes = [
   {
@@ -46,12 +47,8 @@ const routes: Routes = [
   },
   {
     path: ROUTER_NAMES.EMPLOYEES,
-    component: CatalogComponent,
+    component: EmployeeListContainer,
     pathMatch: "full",
-    resolve: {
-      employees: CatalogResolver,
-      title: (): string => 'Список сотрудников'
-    }
   },
   {
     path: ROUTER_NAMES.EMPLOYEE,

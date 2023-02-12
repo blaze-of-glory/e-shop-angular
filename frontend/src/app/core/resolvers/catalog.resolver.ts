@@ -20,9 +20,6 @@ export class CatalogResolver implements Resolve<any> {
       case ROUTER_NAMES.PRODUCTS : {
         return this.apiService.getFilteredProducts(routeSnapshot.params['provider'],routeSnapshot.params['material']);
       }
-      case ROUTER_NAMES.EMPLOYEES : {
-        return this.apiService.getAllEmployees();
-      }
       case ROUTER_NAMES.SHOPS : {
         return this.apiService.getAllShops();
       }

@@ -54,23 +54,6 @@
         <button [routerLink]="ROUTER_LINKS.ADD + '/product'" class="btn btn-success ms-2 add">+</button>
       </div>
     </ng-template>
-    <ng-template [ngIf]="employees">
-      <div *ngFor="let employee of employees" class="col-3 mb-3">
-        <div class="card" style="width: 18rem;">
-          <img [src]="employee?.img" alt="Фото сотрудника" class="card-img-top">
-          <div class="card-body">
-            <h5 class="card-title" [routerLink]="employee.id">{{employee.name}} {{employee.surname}}</h5>
-            <div class="d-flex justify-content-center mt-3">
-              <button class="btn btn-primary" (click)="edit(employee)">Редактировать</button>
-              <button class="btn btn-danger" (click)="delete(employee.id)">Удалить</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <button [routerLink]="ROUTER_LINKS.ADD + '/employee'" class="btn btn-success ms-2 add">+</button>
-      </div>
-    </ng-template>
     <ng-template [ngIf]="shops">
       <div *ngFor="let shop of shops" class="col-3 mb-3">
         <div class="card" style="width: 18rem;">
