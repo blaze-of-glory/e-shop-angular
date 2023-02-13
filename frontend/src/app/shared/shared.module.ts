@@ -4,6 +4,8 @@ import { HeaderComponent } from "./components/header/header.component";
 import { RouterLink, RouterLinkWithHref } from "@angular/router";
 import { FooterComponent } from './components/footer/footer.component';
 import { CardComponent } from './components/card/card.component';
+import { CardDetailsComponent } from './components/card-details/card-details.component';
+import { CardDetailsContainer } from './containers/card-details/card-details.container';
 
 
 
@@ -11,7 +13,9 @@ import { CardComponent } from './components/card/card.component';
   declarations: [
     HeaderComponent,
     FooterComponent,
-    CardComponent
+    CardComponent,
+    CardDetailsComponent,
+    CardDetailsContainer
   ],
     exports: [
         HeaderComponent,

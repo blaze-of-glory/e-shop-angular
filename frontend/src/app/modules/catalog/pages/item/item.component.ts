@@ -4,7 +4,6 @@ import { Product } from "../../../../shared/interfaces/product";
 import { Employee } from "../../../../shared/interfaces/employee";
 import { ROUTER_NAMES } from '../../../../shared/constants/router-names';
 import { ApiService } from "../../../../core/api.service";
-import { ItemService } from '../../../../core/item.service';
 
 @Component({
   selector: 'app-item',
@@ -19,7 +18,6 @@ export class ItemComponent implements OnInit{
   constructor(
     private route: ActivatedRoute,
     private apiService: ApiService,
-    private itemService: ItemService,
   ) {  }
 
   ngOnInit(): void {
@@ -28,13 +26,6 @@ export class ItemComponent implements OnInit{
         this.itemType = 'product';
         this.apiService.getProductById(this.route.snapshot.params['product']).subscribe(selectedProduct => {
           this.product = selectedProduct;
-        });
-        break;
-      }
-      case ROUTER_NAMES.EMPLOYEE : {
-        this.itemType = 'employee';
-        this.apiService.getEmployeeById(this.route.snapshot.params['employee']).subscribe(selectedEmployee => {
-          this.employee = selectedEmployee;
         });
         break;
       }

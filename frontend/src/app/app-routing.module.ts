@@ -7,6 +7,8 @@ import { ItemComponent } from "./modules/catalog/pages/item/item.component";
 import { ManipulateComponent } from "./modules/catalog/pages/manipulate/manipulate.component";
 import { CatalogResolver } from './core/resolvers/catalog.resolver';
 import { EmployeeListContainer } from './modules/employees/containers/employee-list/employee-list.container';
+import { CardDetailsResolver } from './core/resolvers/card-details.resolver';
+import { CardDetailsContainer } from './shared/containers/card-details/card-details.container';
 
 const routes: Routes = [
   {
@@ -52,8 +54,11 @@ const routes: Routes = [
   },
   {
     path: ROUTER_NAMES.EMPLOYEE,
-    component: ItemComponent,
-    pathMatch: "full"
+    component: CardDetailsContainer,
+    pathMatch: "full",
+    resolve: {
+      employee: CardDetailsResolver
+    }
   },
   {
     path: ROUTER_NAMES.SHOPS,

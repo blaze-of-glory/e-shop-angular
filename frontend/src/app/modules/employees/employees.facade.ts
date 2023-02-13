@@ -41,10 +41,7 @@ export class EmployeesFacade {
   }
 
   openDetails(id: string) {
-    this.setCurrentEmployee(id);
-    this.getCurrentEmployee$().pipe(take(1)).subscribe(employee => {
-      console.log(employee);
-    });
+    this.router.navigateByUrl(ROUTER_LINKS.EMPLOYEES + `/${id}`);
   }
 
   addEmployee() {
