@@ -14,7 +14,7 @@ import { Location } from '@angular/common'
 })
 export class ManipulateComponent implements OnInit {
   title!: string;
-  instance!: 'employee' | 'shop' | 'provider' | 'material' | 'product';
+  instance: 'shop' | 'provider' | 'material' | 'product';
   form!: FormGroup;
 
   constructor(
@@ -28,20 +28,6 @@ export class ManipulateComponent implements OnInit {
 
   ngOnInit(): void {
     switch (this.route.snapshot.params['instance']) {
-      case 'employee' : {
-        this.availabilityChecker(this.itemService.selectedEmployee);
-        this.title = this.route.routeConfig?.path === ROUTER_NAMES.ADD ? 'Добавить нового сотрудника' : 'Редактировать сотрудника';
-        this.instance = 'employee';
-        this.form = this.fb.group({
-          img: [this.itemService.selectedEmployee?.img, [Validators.required]],
-          name: [this.itemService.selectedEmployee?.name, [Validators.required]],
-          surname: [this.itemService.selectedEmployee?.surname, [Validators.required]],
-          age: [this.itemService.selectedEmployee?.age, [Validators.required]],
-          position: [this.itemService.selectedEmployee?.position, [Validators.required]],
-          salary: [this.itemService.selectedEmployee?.salary, [Validators.required]]
-        });
-        break;
-      }
       case 'shop' : {
         this.availabilityChecker(this.itemService.selectedShop);
         this.title = this.route.routeConfig?.path === ROUTER_NAMES.ADD ? 'Добавление нового магазина' : 'Редактирование магазина';
@@ -101,18 +87,6 @@ export class ManipulateComponent implements OnInit {
 
   public manipulate(): void {
     switch (this.instance) {
-      case 'employee': {
-        if (this.route.routeConfig?.path === ROUTER_NAMES.ADD) {
-          this.apiService.createEmployee(this.form.value).subscribe(() => {
-            this.goBackToAll(this.form);
-          });
-        } else {
-          this.apiService.editEmployee(this.itemService.selectedEmployee.id, this.form.value).subscribe(() => {
-            this.goBackToAll(this.form);
-          })
-        }
-        break;
-      }
       case 'shop': {
         if (this.route.routeConfig?.path === ROUTER_NAMES.ADD) {
           this.apiService.createShop(this.form.value).subscribe(() => {

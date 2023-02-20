@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { EmployeesApi } from './api/employees.api';
 import { EmployeesState } from './state/employees.state';
-import { map, Observable, take, tap } from 'rxjs';
-import { Employee } from '../../shared/interfaces/employee';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { ROUTER_LINKS } from '../../shared/constants/router-links';
+import { Employee } from './classes/employee';
 
 @Injectable({
   providedIn: 'root'
@@ -29,15 +29,8 @@ export class EmployeesFacade {
     return this.state.getCurrentEmployee$();
   }
 
-  setCurrentEmployee(id: string | null) {
-    if (id) {
-      this.getEmployees$().pipe(
-        map(employees => employees.find(employee => employee.id === id)),
-        tap((currentEmployee: Employee) => this.state.setCurrentEmployee(currentEmployee))
-      ).subscribe();
-    } else {
-      this.state.setCurrentEmployee(null);
-    }
+  setCurrentEmployee(employee: Employee) {
+    this.state.setCurrentEmployee(employee);
   }
 
   openDetails(id: string) {
@@ -45,33 +38,32 @@ export class EmployeesFacade {
   }
 
   addEmployee() {
-     this.router.navigateByUrl(ROUTER_LINKS.ADD + '/employee');
+     this.setCurrentEmployee(new Employee());
   }
 
-  editEmployee(id: string) {
-    this.setCurrentEmployee(id);
-    this.getCurrentEmployee$().pipe(take(1)).subscribe(employee => {
-      console.log(employee);
-    });
+  createEmployee(employee: Employee) {
+    this.state.setLoading(true);
+    this.api.createEmployee(employee).subscribe(
+      () => {
+        this.loadEmployees();
+        this.setCurrentEmployee(null);
+      },
+      error => console.log(error),
+      () => this.state.setLoading(false)
+    );
   }
 
-  // createEmployee(employee: Employee) {
-  //   this.state.setLoading(true);
-  //   this.api.createEmployee(employee).subscribe(
-  //     () => this.loadEmployees(),
-  //     error => console.log(error),
-  //     () => this.state.setLoading(false)
-  //   );
-  // }
-  //
-  // updateEmployee(employee: Employee) {
-  //   this.state.setLoading(true);
-  //   this.api.editEmployee(employee.id, employee).subscribe(
-  //     () => this.loadEmployees(),
-  //     error => console.log(error),
-  //     () => this.state.setLoading(false)
-  //   );
-  // }
+  editEmployee(employee: Employee) {
+    this.state.setLoading(true);
+    this.api.editEmployee(employee.id, employee).subscribe(
+      () => {
+        this.loadEmployees();
+        this.setCurrentEmployee(null);
+      },
+      error => console.log(error),
+      () => this.state.setLoading(false)
+    );
+  }
 
   deleteEmployee(id: string) {
     this.state.setLoading(true);
@@ -81,5 +73,4 @@ export class EmployeesFacade {
       () => this.state.setLoading(false)
     );
   }
-
 }
