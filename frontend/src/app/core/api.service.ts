@@ -3,7 +3,6 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "../../environments/environment";
 import { AboutUs } from "../shared/interfaces/about-us";
-import { Employee } from "../shared/interfaces/employee";
 import { Shop } from "../shared/interfaces/shop";
 import { Provider } from "../shared/interfaces/provider";
 import { Material } from "../shared/interfaces/material";
@@ -20,18 +19,6 @@ export class ApiService {
 
   public getAboutUs(): Observable<AboutUs> {
     return this.http.get<AboutUs>(this.apiEndpoint + '/about-us');
-  }
-
-  public getEmployeeById(id: string): Observable<Employee> {
-    return this.http.get<Employee>(this.apiEndpoint + `/employees/${id}`);
-  }
-
-  public createEmployee(employeeDetails: any): Observable<Employee> {
-    return this.http.post<Employee>(this.apiEndpoint + '/employees', employeeDetails);
-  }
-
-  public editEmployee(id: string,employeeDetails: any): Observable<Employee> {
-    return this.http.put<Employee>(this.apiEndpoint + `/employees/${id}`, employeeDetails);
   }
 
   public getAllShops(): Observable<Shop[]> {

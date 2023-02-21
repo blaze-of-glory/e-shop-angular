@@ -1,4 +1,4 @@
-<div *ngIf="itemType === 'product'; else employeeCard">
+<div *ngIf="itemType === 'product'">
   <h1 class="text-center">{{product.title}}</h1>
   <div class="image-block mb-3">
     <div class="image-wrapper">
@@ -13,18 +13,3 @@
     <li class="list-group-item">Цена: {{product.cost}}</li>
   </ul>
 </div>
-<ng-template #employeeCard>
-  <div *ngIf="employee">
-    <h1 class="text-center">{{employee.name}} {{employee.surname}}</h1>
-    <div class="image-block mb-3">
-      <div class="image-wrapper">
-        <img [src]="employee.img" alt="Фото сотрудника">
-      </div>
-    </div>
-    <ul class="list-group">
-      <li class="list-group-item">Возраст: {{employee.age}}</li>
-      <li class="list-group-item">Должность: {{employee.position}}</li>
-      <li class="list-group-item">З/П: {{employee.salary}}</li>
-    </ul>
-  </div>
-</ng-template>

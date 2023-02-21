@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { Product } from "../../../../shared/interfaces/product";
-import { Employee } from "../../../../shared/interfaces/employee";
 import { ROUTER_NAMES } from '../../../../shared/constants/router-names';
 import { ApiService } from "../../../../core/api.service";
 
@@ -12,8 +11,7 @@ import { ApiService } from "../../../../core/api.service";
 })
 export class ItemComponent implements OnInit{
   product!: Product;
-  employee!: Employee;
-  itemType!: 'product' | 'employee';
+  itemType!: 'product';
 
   constructor(
     private route: ActivatedRoute,
