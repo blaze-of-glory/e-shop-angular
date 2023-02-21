@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { ROUTER_NAMES } from '../../../../shared/constants/router-names';
 import { ApiService } from "../../../../core/api.service";
-import { Shop } from "../../../../shared/interfaces/shop";
 import { Provider } from "../../../../shared/interfaces/provider";
 import { Material } from "../../../../shared/interfaces/material";
 import { Product } from "../../../../shared/interfaces/product";
@@ -19,7 +18,6 @@ export class CatalogComponent implements OnInit {
   public providers!: Provider[];
   public materials!: Material[];
   public products!: Product[];
-  public shops!: Shop[];
   public readonly ROUTER_LINKS = ROUTER_LINKS;
 
   constructor(
@@ -34,7 +32,6 @@ export class CatalogComponent implements OnInit {
       this.providers = resolvedData['providers'];
       this.materials = resolvedData['materials'];
       this.products = resolvedData['products'];
-      this.shops = resolvedData['shops'];
       this.title = resolvedData['title'];
     });
   }
@@ -59,23 +56,11 @@ export class CatalogComponent implements OnInit {
         });
         break;
       }
-      case ROUTER_NAMES.SHOPS : {
-        this.apiService.getAllShops().subscribe(shops => {
-          this.shops = shops;
-        });
-        break;
-      }
     }
   }
 
   public delete(id: string) {
     switch (this.route.snapshot.routeConfig?.path) {
-      case ROUTER_NAMES.SHOPS: {
-        this.apiService.deleteShop(id).subscribe(() => {
-          this.getAll();
-        });
-        break;
-      }
       case ROUTER_NAMES.PRODUCTS: {
         this.apiService.deleteProduct(id).subscribe(() => {
           this.getAll();
@@ -87,11 +72,6 @@ export class CatalogComponent implements OnInit {
 
   public edit(item: any) {
     switch (this.route.snapshot.routeConfig?.path) {
-      case ROUTER_NAMES.SHOPS: {
-        this.itemService.selectedShop = item;
-        this.router.navigate([this.ROUTER_LINKS.EDIT + '/shop']);
-        break;
-      }
       case ROUTER_NAMES.PROVIDERS: {
         this.itemService.selectedProvider = item;
         this.router.navigate([this.ROUTER_LINKS.EDIT + '/provider']);

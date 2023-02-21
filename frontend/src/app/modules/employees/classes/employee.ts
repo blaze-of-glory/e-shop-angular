@@ -1,5 +1,5 @@
 export class Employee {
-  id?: string
+  id?: string;
   img: string;
   name: string;
   surname: string;

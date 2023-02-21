@@ -7,6 +7,7 @@ import { SharedModule } from "./shared/shared.module";
 import { CatalogModule } from "./modules/catalog/catalog.module";
 import { HttpClientModule } from "@angular/common/http";
 import { EmployeesModule } from './modules/employees/employees.module';
+import { ShopsModule } from './modules/shops/shops.module';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { EmployeesModule } from './modules/employees/employees.module';
     HomeModule,
     CatalogModule,
     EmployeesModule,
+    ShopsModule,
     SharedModule
   ],
   providers: [],

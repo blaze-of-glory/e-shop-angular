@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Employee } from '../../../modules/employees/classes/employee';
+import { Shop } from '../../../modules/shops/classes/shop';
 
 @Component({
   selector: 'app-manipulator',
@@ -9,11 +10,12 @@ import { Employee } from '../../../modules/employees/classes/employee';
 })
 export class ManipulatorComponent implements OnInit {
   @Input() employee: Employee = null;
+  @Input() shop: Shop = null;
   @Input() creationMode: boolean;
 
   @Output() cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() creationResultEvent: EventEmitter<Employee> = new EventEmitter<Employee>();
-  @Output() editionResultEvent: EventEmitter<Employee> = new EventEmitter<Employee>();
+  @Output() creationResultEvent: EventEmitter<any> = new EventEmitter<any>();
+  @Output() editionResultEvent: EventEmitter<any> = new EventEmitter<any>();
 
   form: FormGroup;
   title: string;
@@ -34,6 +36,17 @@ export class ManipulatorComponent implements OnInit {
         });
         this.creationMode ? this.title = 'Создание сотрудника' : this.title = 'Редактирование сотрудника';
         this.creationMode ? this.recordId = null : this.recordId = this.employee.id;
+        break;
+      }
+      case !!this.shop: {
+        this.form = this.fb.group({
+          img: [this.shop.img, [Validators.required]],
+          address: [this.shop.address, [Validators.required]],
+          openTime: [this.shop.openTime, [Validators.required]],
+          closeTime: [this.shop.closeTime, [Validators.required]]
+        });
+        this.creationMode ? this.title = 'Создание магазина' : this.title = 'Редактирование магазина';
+        this.creationMode ? this.recordId = null : this.recordId = this.shop.id;
         break;
       }
     }

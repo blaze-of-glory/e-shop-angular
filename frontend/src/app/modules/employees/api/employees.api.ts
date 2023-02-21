@@ -21,11 +21,11 @@ export class EmployeesApi {
     return this.http.get<Employee>(this.apiEndpoint + `/employees/${id}`);
   }
 
-  createEmployee(employeeDetails: any): Observable<Employee> {
+  createEmployee(employeeDetails: Employee): Observable<Employee> {
     return this.http.post<Employee>(this.apiEndpoint + '/employees', employeeDetails);
   }
 
-  editEmployee(id: string, employeeDetails: any): Observable<Employee> {
+  editEmployee(id: string, employeeDetails: Employee): Observable<Employee> {
     return this.http.put<Employee>(this.apiEndpoint + `/employees/${id}`, employeeDetails);
   }
 

@@ -14,7 +14,7 @@ import { Location } from '@angular/common'
 })
 export class ManipulateComponent implements OnInit {
   title!: string;
-  instance: 'shop' | 'provider' | 'material' | 'product';
+  instance: 'provider' | 'material' | 'product';
   form!: FormGroup;
 
   constructor(
@@ -28,18 +28,6 @@ export class ManipulateComponent implements OnInit {
 
   ngOnInit(): void {
     switch (this.route.snapshot.params['instance']) {
-      case 'shop' : {
-        this.availabilityChecker(this.itemService.selectedShop);
-        this.title = this.route.routeConfig?.path === ROUTER_NAMES.ADD ? 'Добавление нового магазина' : 'Редактирование магазина';
-        this.instance = 'shop';
-        this.form = this.fb.group({
-          img: [this.itemService.selectedShop?.img, [Validators.required]],
-          address: [this.itemService.selectedShop?.address, [Validators.required]],
-          openTime: [this.itemService.selectedShop?.openTime, [Validators.required]],
-          closeTime: [this.itemService.selectedShop?.closeTime, [Validators.required]]
-        });
-        break;
-      }
       case 'provider' : {
         this.availabilityChecker(this.itemService.selectedProvider);
         this.title = this.route.routeConfig?.path === ROUTER_NAMES.ADD ? 'Добавление нового поставщика' : 'Редактирование поставщика';
@@ -87,18 +75,6 @@ export class ManipulateComponent implements OnInit {
 
   public manipulate(): void {
     switch (this.instance) {
-      case 'shop': {
-        if (this.route.routeConfig?.path === ROUTER_NAMES.ADD) {
-          this.apiService.createShop(this.form.value).subscribe(() => {
-            this.goBackToAll(this.form);
-          });
-        } else {
-          this.apiService.editShop(this.itemService.selectedShop.id, this.form.value).subscribe(() => {
-            this.goBackToAll(this.form);
-          })
-        }
-        break;
-      }
       case 'provider': {
         if (this.route.routeConfig?.path === ROUTER_NAMES.ADD) {
           this.apiService.createProvider(this.form.value).subscribe(() => {

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Shop } from '../../interfaces/shop';
+import { Shop } from '../../../modules/shops/classes/shop';
 import { Material } from '../../interfaces/material';
 import { Product } from '../../interfaces/product';
 import { Employee } from '../../../modules/employees/classes/employee';
@@ -16,7 +16,7 @@ export class CardComponent {
   @Input() product: Product = null;
 
   @Output() openDetailsEvent: EventEmitter<string> = new EventEmitter<string>();
-  @Output() editEvent: EventEmitter<Employee> = new EventEmitter<Employee>();
+  @Output() editEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output() deleteEvent: EventEmitter<string> = new EventEmitter<string>();
 
   constructor() { }
@@ -25,8 +25,8 @@ export class CardComponent {
     this.openDetailsEvent.emit(id);
   }
 
-  edit(employee: Employee) {
-    this.editEvent.emit(employee);
+  edit(card: Employee | Shop) {
+    this.editEvent.emit(card);
   }
 
   delete(id: string) {

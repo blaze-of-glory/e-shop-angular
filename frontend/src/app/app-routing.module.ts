@@ -9,6 +9,7 @@ import { CatalogResolver } from './core/resolvers/catalog.resolver';
 import { EmployeeListContainer } from './modules/employees/containers/employee-list/employee-list.container';
 import { CardDetailsResolver } from './core/resolvers/card-details.resolver';
 import { CardDetailsContainer } from './shared/containers/card-details/card-details.container';
+import { ShopListContainer } from './modules/shops/containers/shop-list/shop-list.container';
 
 const routes: Routes = [
   {
@@ -62,12 +63,8 @@ const routes: Routes = [
   },
   {
     path: ROUTER_NAMES.SHOPS,
-    component: CatalogComponent,
+    component: ShopListContainer,
     pathMatch: "full",
-    resolve: {
-      shops: CatalogResolver,
-      title: (): string => 'Список магазинов'
-    }
   },
   {
     path: ROUTER_NAMES.ADD,

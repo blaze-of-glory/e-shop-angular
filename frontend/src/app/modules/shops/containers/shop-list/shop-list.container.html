@@ -1,0 +1,26 @@
+<ng-container *ngIf="!shop; else manipulate">
+  <h1 class="text-center">Магазины</h1>
+  <div class="container text-center">
+    <div class="row">
+      <div *ngFor="let shop of shops" class="col-3 mb-3">
+        <app-card
+          [shop]="shop"
+          (editEvent)="setCurrentShop($event)"
+          (deleteEvent)="deleteShop($event)"
+        ></app-card>
+      </div>
+    </div>
+    <div>
+      <button (click)="addShop()" class="btn btn-success ms-2 add">+</button>
+    </div>
+  </div>
+</ng-container>
+<ng-template #manipulate>
+  <app-manipulator
+    [shop]="shop"
+    [creationMode]="isCreationMode()"
+    (creationResultEvent)="createShop($event)"
+    (editionResultEvent)="editShop($event)"
+    (cancelEvent)="cancel()"
+  ></app-manipulator>
+</ng-template>
