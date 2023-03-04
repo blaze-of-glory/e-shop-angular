@@ -1,5 +1,5 @@
-export interface Provider {
-  id: string;
+export class Provider {
+  id?: string;
   img: string;
   title: string;
   subtitle: string;

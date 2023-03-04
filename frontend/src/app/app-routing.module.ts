@@ -10,6 +10,7 @@ import { EmployeeListContainer } from './modules/employees/containers/employee-l
 import { CardDetailsResolver } from './core/resolvers/card-details.resolver';
 import { CardDetailsContainer } from './shared/containers/card-details/card-details.container';
 import { ShopListContainer } from './modules/shops/containers/shop-list/shop-list.container';
+import { ProviderListContainer } from './modules/providers/containers/provider-list/provider-list.container';
 
 const routes: Routes = [
   {
@@ -18,12 +19,8 @@ const routes: Routes = [
   },
   {
     path: ROUTER_NAMES.PROVIDERS,
-    component: CatalogComponent,
+    component: ProviderListContainer,
     pathMatch: 'full',
-    resolve: {
-      providers: CatalogResolver,
-      title: (): string => 'Список поставщиков'
-    }
   },
   {
     path: ROUTER_NAMES.MATERIALS,

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ApiService } from "../../../../core/api.service";
 import { ROUTER_NAMES } from '../../../../shared/constants/router-names';
-import { ROUTER_LINKS } from '../../../../shared/constants/router-links';
+// import { ROUTER_LINKS } from '../../../../shared/constants/router-links';
 import { ItemService } from "../../../../core/item.service";
 import { Location } from '@angular/common'
 
@@ -14,7 +14,7 @@ import { Location } from '@angular/common'
 })
 export class ManipulateComponent implements OnInit {
   title!: string;
-  instance: 'provider' | 'material' | 'product';
+  instance: 'material' | 'product';
   form!: FormGroup;
 
   constructor(
@@ -23,26 +23,13 @@ export class ManipulateComponent implements OnInit {
     private apiService: ApiService,
     private itemService: ItemService,
     private location: Location,
-    private router: Router
+    // private router: Router
     ) { }
 
   ngOnInit(): void {
     switch (this.route.snapshot.params['instance']) {
-      case 'provider' : {
-        this.availabilityChecker(this.itemService.selectedProvider);
-        this.title = this.route.routeConfig?.path === ROUTER_NAMES.ADD ? 'Добавление нового поставщика' : 'Редактирование поставщика';
-        this.instance = 'provider';
-        this.form = this.fb.group({
-          img: [this.itemService.selectedProvider?.img, [Validators.required]],
-          title: [this.itemService.selectedProvider?.title, [Validators.required]],
-          subtitle: [this.itemService.selectedProvider?.subtitle, [Validators.required]],
-          description: [this.itemService.selectedProvider?.description, [Validators.required]],
-          foundingDate: [this.itemService.selectedProvider?.foundingDate, [Validators.required]]
-        });
-        break;
-      }
       case 'material' : {
-        this.availabilityChecker(this.itemService.selectedMaterial,this.itemService.selectedProvider, this.itemService.selectedMaterial);
+        // this.availabilityChecker(this.itemService.selectedMaterial,this.itemService.selectedProvider, this.itemService.selectedMaterial);
         this.title = this.route.routeConfig?.path === ROUTER_NAMES.ADD ? 'Добавление нового материала' : 'Редактирование материала';
         this.instance = 'material';
         this.form = this.fb.group({
@@ -53,7 +40,7 @@ export class ManipulateComponent implements OnInit {
         break;
       }
       case 'product' : {
-        this.availabilityChecker(this.itemService.selectedProduct,this.itemService.selectedProvider, this.itemService.selectedMaterial);
+        // this.availabilityChecker(this.itemService.selectedProduct,this.itemService.selectedProvider, this.itemService.selectedMaterial);
         this.title = this.route.routeConfig?.path === ROUTER_NAMES.ADD ? 'Добавление нового изделия' : 'Редактирование изделия';
         this.instance = 'product';
         this.form = this.fb.group({
@@ -74,52 +61,40 @@ export class ManipulateComponent implements OnInit {
   }
 
   public manipulate(): void {
-    switch (this.instance) {
-      case 'provider': {
-        if (this.route.routeConfig?.path === ROUTER_NAMES.ADD) {
-          this.apiService.createProvider(this.form.value).subscribe(() => {
-            this.goBackToAll(this.form);
-          });
-        } else {
-          this.apiService.editProvider(this.itemService.selectedProvider.id, this.form.value).subscribe(() => {
-            this.goBackToAll(this.form);
-          })
-        }
-        break;
-      }
-      case 'material': {
-        if (this.route.routeConfig?.path === ROUTER_NAMES.ADD) {
-          const materialData = {
-            materialDetails: this.form.value,
-            providerId: this.itemService.selectedProvider.id
-          }
-          this.apiService.createMaterial(materialData).subscribe(() => {
-            this.goBackToAll(this.form);
-          });
-        } else {
-          this.apiService.editMaterial(this.itemService.selectedMaterial.id, this.form.value).subscribe(() => {
-            this.goBackToAll(this.form);
-          })
-        }
-        break;
-      }
-      case 'product': {
-        if (this.route.routeConfig?.path === ROUTER_NAMES.ADD) {
-          const productData = {
-            productDetails: this.form.value,
-            providerId: this.itemService.selectedProvider.id,
-            materialId: this.itemService.selectedMaterial.id
-          }
-          this.apiService.createProduct(productData).subscribe(() => {
-            this.goBackToAll(this.form);
-          });
-        } else {
-          this.apiService.editProduct(this.itemService.selectedProduct.id, this.form.value).subscribe(() => {
-            this.goBackToAll(this.form);
-          })
-        }
-      }
-    }
+    // switch (this.instance) {
+    //   case 'material': {
+    //     if (this.route.routeConfig?.path === ROUTER_NAMES.ADD) {
+    //       const materialData = {
+    //         materialDetails: this.form.value,
+    //         providerId: this.itemService.selectedProvider.id
+    //       }
+    //       this.apiService.createMaterial(materialData).subscribe(() => {
+    //         this.goBackToAll(this.form);
+    //       });
+    //     } else {
+    //       this.apiService.editMaterial(this.itemService.selectedMaterial.id, this.form.value).subscribe(() => {
+    //         this.goBackToAll(this.form);
+    //       })
+    //     }
+    //     break;
+    //   }
+    //   case 'product': {
+    //     if (this.route.routeConfig?.path === ROUTER_NAMES.ADD) {
+    //       const productData = {
+    //         productDetails: this.form.value,
+    //         providerId: this.itemService.selectedProvider.id,
+    //         materialId: this.itemService.selectedMaterial.id
+    //       }
+    //       this.apiService.createProduct(productData).subscribe(() => {
+    //         this.goBackToAll(this.form);
+    //       });
+    //     } else {
+    //       this.apiService.editProduct(this.itemService.selectedProduct.id, this.form.value).subscribe(() => {
+    //         this.goBackToAll(this.form);
+    //       })
+    //     }
+    //   }
+    // }
   }
 
   public goBackToAll(form: FormGroup) {
@@ -131,13 +106,13 @@ export class ManipulateComponent implements OnInit {
     return form.invalid;
   }
 
-  private availabilityChecker(instance: any, provider: any = true, material: any = true) {
-    if (this.route.routeConfig?.path === ROUTER_NAMES.ADD && !provider && !material) {
-      this.router.navigate([ROUTER_LINKS.HOME])
-    }
-
-    if (this.route.routeConfig?.path === ROUTER_NAMES.EDIT && !instance) {
-      this.router.navigate([ROUTER_LINKS.HOME])
-    }
-  }
+  // private availabilityChecker(instance: any, provider: any = true, material: any = true) {
+  //   if (this.route.routeConfig?.path === ROUTER_NAMES.ADD && !provider && !material) {
+  //     this.router.navigate([ROUTER_LINKS.HOME])
+  //   }
+  //
+  //   if (this.route.routeConfig?.path === ROUTER_NAMES.EDIT && !instance) {
+  //     this.router.navigate([ROUTER_LINKS.HOME])
+  //   }
+  // }
 }

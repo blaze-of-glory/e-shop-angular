@@ -3,7 +3,6 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "../../environments/environment";
 import { AboutUs } from "../shared/interfaces/about-us";
-import { Provider } from "../shared/interfaces/provider";
 import { Material } from "../shared/interfaces/material";
 import { Product } from "../shared/interfaces/product";
 
@@ -18,18 +17,6 @@ export class ApiService {
 
   public getAboutUs(): Observable<AboutUs> {
     return this.http.get<AboutUs>(this.apiEndpoint + '/about-us');
-  }
-
-  public getAllProviders(): Observable<Provider[]> {
-    return this.http.get<Provider[]>(this.apiEndpoint + '/providers');
-  }
-
-  public createProvider(providerDetails: any): Observable<Provider> {
-    return this.http.post<Provider>(this.apiEndpoint + '/providers', providerDetails);
-  }
-
-  public editProvider(id: string, providerDetails: any): Observable<Provider> {
-    return this.http.put<Provider>(this.apiEndpoint + `/providers/${id}`, providerDetails);
   }
 
   public getFilteredMaterials(providerId: string): Observable<Material[]> {

@@ -51,6 +51,31 @@
         </div>
       </form>
     </ng-template>
+    <ng-template [ngSwitchCase]="!!provider">
+      <form [formGroup]="form">
+        <div class="mb-3">
+          <label for="providerPhoto" class="form-label">Лого</label>
+          <input formControlName="img" class="form-control" id="providerPhoto" aria-describedby="providerPhotoHelp">
+          <div id="providerPhotoHelp" class="form-text">Укажите ссылку на лого провайдера</div>
+        </div>
+        <div class="mb-3">
+          <label for="providerTitle" class="form-label">Название</label>
+          <input formControlName="title" class="form-control" id="providerTitle">
+        </div>
+        <div class="mb-3">
+          <label for="providerSubtitle" class="form-label">Слоган</label>
+          <input formControlName="subtitle" class="form-control" id="providerSubtitle">
+        </div>
+        <div class="mb-3">
+          <label for="providerDescription" class="form-label">Описание</label>
+          <input formControlName="description" class="form-control" id="providerDescription">
+        </div>
+        <div class="mb-3">
+          <label for="providerFoundingDate" class="form-label">Дата основания</label>
+          <input formControlName="foundingDate" class="form-control" id="providerFoundingDate" type="date">
+        </div>
+      </form>
+    </ng-template>
   </div>
   <div class="d-flex justify-content-between">
     <button (click)="manipulate()" [disabled]="form.invalid" class="btn btn-primary">Отправить</button>

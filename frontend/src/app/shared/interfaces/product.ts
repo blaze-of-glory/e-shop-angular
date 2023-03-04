@@ -1,4 +1,4 @@
-import { Provider } from './provider';
+import { Provider } from '../../modules/providers/classes/provider';
 import { Material } from './material';
 
 export interface Product {

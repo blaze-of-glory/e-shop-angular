@@ -3,6 +3,7 @@ import { Shop } from '../../../modules/shops/classes/shop';
 import { Material } from '../../interfaces/material';
 import { Product } from '../../interfaces/product';
 import { Employee } from '../../../modules/employees/classes/employee';
+import { Provider } from '../../../modules/providers/classes/provider';
 
 @Component({
   selector: 'app-card',
@@ -12,6 +13,7 @@ import { Employee } from '../../../modules/employees/classes/employee';
 export class CardComponent {
   @Input() employee: Employee = null;
   @Input() shop: Shop = null;
+  @Input() provider: Provider = null;
   @Input() material: Material = null;
   @Input() product: Product = null;
 
@@ -25,7 +27,7 @@ export class CardComponent {
     this.openDetailsEvent.emit(id);
   }
 
-  edit(card: Employee | Shop) {
+  edit(card: Employee | Shop | Provider) {
     this.editEvent.emit(card);
   }
 

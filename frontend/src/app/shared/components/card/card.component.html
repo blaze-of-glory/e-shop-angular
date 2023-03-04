@@ -24,4 +24,17 @@
       </div>
     </div>
   </ng-template>
+  <ng-template [ngSwitchCase]="!!provider">
+      <div class="card" style="width: 18rem;">
+        <img [src]="provider.img" alt="Логотип поставщика" class="card-img-top">
+        <div class="card-body">
+          <h5 (click)="openDetails(provider.id)" class="card-title">{{provider.title}}</h5>
+          <h6 class="text-center">{{provider.subtitle}}</h6>
+          <p>{{provider.description}}</p>
+          <div class="d-flex justify-content-center mt-3">
+            <button class="btn btn-primary" (click)="edit(provider)">Редактировать</button>
+          </div>
+        </div>
+      </div>
+  </ng-template>
 </ng-container>

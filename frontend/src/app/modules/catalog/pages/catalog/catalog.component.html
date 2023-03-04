@@ -1,24 +1,6 @@
 <h1 class="text-center">{{title}}</h1>
 <div class="container text-center">
   <div class="row">
-    <ng-template [ngIf]="providers">
-      <div *ngFor="let provider of providers" class="col-3 mb-3">
-        <div class="card" style="width: 18rem;">
-          <img [src]="provider?.img" alt="Логотип поставщика" class="card-img-top">
-          <div class="card-body">
-            <h5 [routerLink]="provider.id" (click)="select(provider)" class="card-title">{{provider.title}}</h5>
-            <h6 class="text-center">{{provider.subtitle}}</h6>
-            <p>{{provider.description}}</p>
-            <div class="d-flex justify-content-center mt-3">
-              <button class="btn btn-primary" (click)="edit(provider)">Редактировать</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <button [routerLink]="ROUTER_LINKS.ADD + '/provider'" class="btn btn-success ms-2 add">+</button>
-      </div>
-    </ng-template>
     <ng-template [ngIf]="materials">
       <div *ngFor="let material of materials" class="col-3 mb-3">
         <div class="card" style="width: 18rem;">

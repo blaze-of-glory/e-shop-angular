@@ -8,6 +8,7 @@ import { CatalogModule } from "./modules/catalog/catalog.module";
 import { HttpClientModule } from "@angular/common/http";
 import { EmployeesModule } from './modules/employees/employees.module';
 import { ShopsModule } from './modules/shops/shops.module';
+import { ProvidersModule } from './modules/providers/providers.module';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { ShopsModule } from './modules/shops/shops.module';
     HttpClientModule,
     HomeModule,
     CatalogModule,
+    ProvidersModule,
     EmployeesModule,
     ShopsModule,
     SharedModule
