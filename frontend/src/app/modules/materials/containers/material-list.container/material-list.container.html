@@ -1,0 +1,26 @@
+<ng-container *ngIf="!material; else manipulate">
+  <h1 class="text-center">Материалы</h1>
+  <div class="container text-center">
+    <div class="row">
+      <div *ngFor="let material of materials" class="col-3 mb-3">
+        <app-card
+          [material]="material"
+          (openDetailsEvent)="openProduct($event)"
+          (editEvent)="setCurrentMaterial($event)"
+        ></app-card>
+      </div>
+    </div>
+    <div>
+      <button (click)="addMaterial()" class="btn btn-success ms-2 add">+</button>
+    </div>
+  </div>
+</ng-container>
+<ng-template #manipulate>
+  <app-manipulator
+    [material]="material"
+    [creationMode]="isCreationMode()"
+    (creationResultEvent)="createMaterial($event)"
+    (editionResultEvent)="editMaterial($event)"
+    (cancelEvent)="cancel()"
+  ></app-manipulator>
+</ng-template>

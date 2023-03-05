@@ -76,6 +76,23 @@
         </div>
       </form>
     </ng-template>
+    <ng-template [ngSwitchCase]="!!material">
+      <form [formGroup]="form">
+        <div class="mb-3">
+          <label for="materialPhoto" class="form-label">Фото</label>
+          <input formControlName="img" class="form-control" id="materialPhoto" aria-describedby="materialPhotoHelp">
+          <div id="materialPhotoHelp" class="form-text">Укажите ссылку на фото материала</div>
+        </div>
+        <div class="mb-3">
+          <label for="materialTitle" class="form-label">Название</label>
+          <input formControlName="title" class="form-control" id="materialTitle">
+        </div>
+        <div class="mb-3">
+          <label for="materialDescription" class="form-label">Описание</label>
+          <input formControlName="description" class="form-control" id="materialDescription">
+        </div>
+      </form>
+    </ng-template>
   </div>
   <div class="d-flex justify-content-between">
     <button (click)="manipulate()" [disabled]="form.invalid" class="btn btn-primary">Отправить</button>

@@ -9,6 +9,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { EmployeesModule } from './modules/employees/employees.module';
 import { ShopsModule } from './modules/shops/shops.module';
 import { ProvidersModule } from './modules/providers/providers.module';
+import { MaterialsModule } from './modules/materials/materials.module';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { ProvidersModule } from './modules/providers/providers.module';
     HomeModule,
     CatalogModule,
     ProvidersModule,
+    MaterialsModule,
     EmployeesModule,
     ShopsModule,
     SharedModule

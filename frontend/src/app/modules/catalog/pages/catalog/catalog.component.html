@@ -1,23 +1,6 @@
 <h1 class="text-center">{{title}}</h1>
 <div class="container text-center">
   <div class="row">
-    <ng-template [ngIf]="materials">
-      <div *ngFor="let material of materials" class="col-3 mb-3">
-        <div class="card" style="width: 18rem;">
-          <img [src]="material?.img" alt="Фото материала" class="card-img-top">
-          <div class="card-body">
-            <h5 [routerLink]="material.id" (click)="select(material)" class="card-title">{{material.title}}</h5>
-            <p>{{material.description}}</p>
-            <div class="d-flex justify-content-center mt-3">
-              <button class="btn btn-primary" (click)="edit(material)">Редактировать</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <button [routerLink]="ROUTER_LINKS.ADD + '/material'" class="btn btn-success ms-2 add">+</button>
-      </div>
-    </ng-template>
     <ng-template [ngIf]="products">
       <div *ngFor="let product of products" class="col-3 mb-3">
         <div class="card" style="width: 18rem;">

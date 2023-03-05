@@ -3,7 +3,6 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "../../environments/environment";
 import { AboutUs } from "../shared/interfaces/about-us";
-import { Material } from "../shared/interfaces/material";
 import { Product } from "../shared/interfaces/product";
 
 @Injectable({
@@ -17,18 +16,6 @@ export class ApiService {
 
   public getAboutUs(): Observable<AboutUs> {
     return this.http.get<AboutUs>(this.apiEndpoint + '/about-us');
-  }
-
-  public getFilteredMaterials(providerId: string): Observable<Material[]> {
-    return this.http.get<Material[]>(this.apiEndpoint + `/materials/filter?providerId=${providerId}`);
-  }
-
-  public createMaterial(materialDetails: any): Observable<Material> {
-    return this.http.post<Material>(this.apiEndpoint + '/materials', materialDetails)
-  }
-
-  public editMaterial(id: string, materialDetails: any): Observable<Material> {
-    return this.http.put<Material>(this.apiEndpoint + `/materials/${id}`, materialDetails);
   }
 
   public getFilteredProducts(providerId: string, materialId: string): Observable<Product[]> {

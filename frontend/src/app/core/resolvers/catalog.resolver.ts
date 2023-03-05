@@ -11,9 +11,6 @@ export class CatalogResolver implements Resolve<any> {
   constructor(private apiService: ApiService) {  }
   resolve(routeSnapshot: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
     switch (routeSnapshot.routeConfig?.path) {
-      case ROUTER_NAMES.MATERIALS : {
-        return this.apiService.getFilteredMaterials(routeSnapshot.params['provider']);
-      }
       case ROUTER_NAMES.PRODUCTS : {
         return this.apiService.getFilteredProducts(routeSnapshot.params['provider'],routeSnapshot.params['material']);
       }

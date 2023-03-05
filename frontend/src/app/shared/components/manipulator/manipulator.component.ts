@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Employee } from '../../../modules/employees/classes/employee';
 import { Shop } from '../../../modules/shops/classes/shop';
 import { Provider } from '../../../modules/providers/classes/provider';
+import { Material } from '../../../modules/materials/classes/material';
 
 @Component({
   selector: 'app-manipulator',
@@ -13,6 +14,7 @@ export class ManipulatorComponent implements OnInit {
   @Input() employee: Employee = null;
   @Input() shop: Shop = null;
   @Input() provider: Provider = null;
+  @Input() material: Material = null;
   @Input() creationMode: boolean;
 
   @Output() cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -61,6 +63,16 @@ export class ManipulatorComponent implements OnInit {
         });
         this.creationMode ? this.title = 'Создание поставщика' : this.title = 'Редактирование поставщика';
         this.creationMode ? this.recordId = null : this.recordId = this.provider.id;
+        break;
+      }
+      case !!this.material: {
+        this.form = this.fb.group({
+          img: [this.material.img, [Validators.required]],
+          title: [this.material.title, [Validators.required]],
+          description: [this.material.description, [Validators.required]]
+        });
+        this.creationMode ? this.title = 'Создание материала' : this.title = 'Редактирование материала';
+        this.creationMode ? this.recordId = null : this.recordId = this.material.id;
         break;
       }
     }

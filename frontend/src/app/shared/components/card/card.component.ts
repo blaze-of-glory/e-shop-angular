@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Shop } from '../../../modules/shops/classes/shop';
-import { Material } from '../../interfaces/material';
+import { Material } from '../../../modules/materials/classes/material';
 import { Product } from '../../interfaces/product';
 import { Employee } from '../../../modules/employees/classes/employee';
 import { Provider } from '../../../modules/providers/classes/provider';
@@ -21,13 +21,11 @@ export class CardComponent {
   @Output() editEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output() deleteEvent: EventEmitter<string> = new EventEmitter<string>();
 
-  constructor() { }
-
   openDetails(id: string) {
     this.openDetailsEvent.emit(id);
   }
 
-  edit(card: Employee | Shop | Provider) {
+  edit(card: Employee | Shop | Provider | Material) {
     this.editEvent.emit(card);
   }
 

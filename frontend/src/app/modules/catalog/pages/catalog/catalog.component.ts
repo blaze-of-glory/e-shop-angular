@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { ROUTER_NAMES } from '../../../../shared/constants/router-names';
 import { ApiService } from "../../../../core/api.service";
-import { Material } from "../../../../shared/interfaces/material";
 import { Product } from "../../../../shared/interfaces/product";
 import { ROUTER_LINKS } from '../../../../shared/constants/router-links';
 import { ItemService } from "../../../../core/item.service";
@@ -14,7 +13,6 @@ import { ItemService } from "../../../../core/item.service";
 })
 export class CatalogComponent implements OnInit {
   public title!: string;
-  public materials!: Material[];
   public products!: Product[];
   public readonly ROUTER_LINKS = ROUTER_LINKS;
 
@@ -27,7 +25,6 @@ export class CatalogComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.data.subscribe(resolvedData => {
-      this.materials = resolvedData['materials'];
       this.products = resolvedData['products'];
       this.title = resolvedData['title'];
     });
@@ -35,12 +32,6 @@ export class CatalogComponent implements OnInit {
 
   private getAll() {
     switch (this.route.snapshot.routeConfig?.path) {
-      case ROUTER_NAMES.MATERIALS : {
-        this.apiService.getFilteredMaterials(this.route.snapshot.params['provider']).subscribe(materials => {
-          this.materials = materials;
-        });
-        break;
-      }
       case ROUTER_NAMES.PRODUCTS : {
         this.apiService.getFilteredProducts(this.route.snapshot.params['provider'],this.route.snapshot.params['material']).subscribe(products => {
           this.products = products;
@@ -63,23 +54,9 @@ export class CatalogComponent implements OnInit {
 
   public edit(item: any) {
     switch (this.route.snapshot.routeConfig?.path) {
-      case ROUTER_NAMES.MATERIALS: {
-        this.itemService.selectedMaterial = item;
-        this.router.navigate([this.ROUTER_LINKS.EDIT + '/material']);
-        break;
-      }
       case ROUTER_NAMES.PRODUCTS: {
         this.itemService.selectedProduct = item;
         this.router.navigate([this.ROUTER_LINKS.EDIT + '/product']);
-      }
-    }
-  }
-
-  select(item: any) {
-    switch (this.route.snapshot.routeConfig?.path) {
-      case ROUTER_NAMES.MATERIALS : {
-        this.itemService.selectedMaterial = item;
-        break;
       }
     }
   }

@@ -37,4 +37,16 @@
         </div>
       </div>
   </ng-template>
+  <ng-template [ngSwitchCase]="!!material">
+    <div class="card" style="width: 18rem;">
+      <img [src]="material?.img" alt="Фото материала" class="card-img-top">
+      <div class="card-body">
+        <h5 (click)="openDetails(material.id)" class="card-title">{{material.title}}</h5>
+        <p>{{material.description}}</p>
+        <div class="d-flex justify-content-center mt-3">
+          <button class="btn btn-primary" (click)="edit(material)">Редактировать</button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
 </ng-container>

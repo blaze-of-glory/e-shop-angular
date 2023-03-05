@@ -14,7 +14,7 @@ import { Location } from '@angular/common'
 })
 export class ManipulateComponent implements OnInit {
   title!: string;
-  instance: 'material' | 'product';
+  instance: 'product';
   form!: FormGroup;
 
   constructor(
@@ -28,17 +28,6 @@ export class ManipulateComponent implements OnInit {
 
   ngOnInit(): void {
     switch (this.route.snapshot.params['instance']) {
-      case 'material' : {
-        // this.availabilityChecker(this.itemService.selectedMaterial,this.itemService.selectedProvider, this.itemService.selectedMaterial);
-        this.title = this.route.routeConfig?.path === ROUTER_NAMES.ADD ? 'Добавление нового материала' : 'Редактирование материала';
-        this.instance = 'material';
-        this.form = this.fb.group({
-          img: [this.itemService.selectedMaterial?.img, [Validators.required]],
-          title: [this.itemService.selectedMaterial?.title, [Validators.required]],
-          description: [this.itemService.selectedMaterial?.description, [Validators.required]]
-        });
-        break;
-      }
       case 'product' : {
         // this.availabilityChecker(this.itemService.selectedProduct,this.itemService.selectedProvider, this.itemService.selectedMaterial);
         this.title = this.route.routeConfig?.path === ROUTER_NAMES.ADD ? 'Добавление нового изделия' : 'Редактирование изделия';
@@ -62,22 +51,6 @@ export class ManipulateComponent implements OnInit {
 
   public manipulate(): void {
     // switch (this.instance) {
-    //   case 'material': {
-    //     if (this.route.routeConfig?.path === ROUTER_NAMES.ADD) {
-    //       const materialData = {
-    //         materialDetails: this.form.value,
-    //         providerId: this.itemService.selectedProvider.id
-    //       }
-    //       this.apiService.createMaterial(materialData).subscribe(() => {
-    //         this.goBackToAll(this.form);
-    //       });
-    //     } else {
-    //       this.apiService.editMaterial(this.itemService.selectedMaterial.id, this.form.value).subscribe(() => {
-    //         this.goBackToAll(this.form);
-    //       })
-    //     }
-    //     break;
-    //   }
     //   case 'product': {
     //     if (this.route.routeConfig?.path === ROUTER_NAMES.ADD) {
     //       const productData = {
