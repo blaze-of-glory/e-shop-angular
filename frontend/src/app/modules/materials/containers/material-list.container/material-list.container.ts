@@ -37,8 +37,8 @@ export class MaterialListContainer implements OnInit, OnDestroy {
     this.facade.setCurrentProviderId(this.route.snapshot.params['provider']);
   }
 
-  openProduct(id: string) {
-    this.facade.openProducts(id);
+  openMaterial(details: Material) {
+    this.facade.openProducts(details.id);
   }
 
   addMaterial() {

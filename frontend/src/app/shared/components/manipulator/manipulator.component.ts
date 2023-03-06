@@ -4,6 +4,7 @@ import { Employee } from '../../../modules/employees/classes/employee';
 import { Shop } from '../../../modules/shops/classes/shop';
 import { Provider } from '../../../modules/providers/classes/provider';
 import { Material } from '../../../modules/materials/classes/material';
+import { Product } from '../../../modules/products/classes/product';
 
 @Component({
   selector: 'app-manipulator',
@@ -15,6 +16,7 @@ export class ManipulatorComponent implements OnInit {
   @Input() shop: Shop = null;
   @Input() provider: Provider = null;
   @Input() material: Material = null;
+  @Input() product: Product = null;
   @Input() creationMode: boolean;
 
   @Output() cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -73,6 +75,19 @@ export class ManipulatorComponent implements OnInit {
         });
         this.creationMode ? this.title = 'Создание материала' : this.title = 'Редактирование материала';
         this.creationMode ? this.recordId = null : this.recordId = this.material.id;
+        break;
+      }
+      case !!this.product: {
+        this.form = this.fb.group({
+          img: [this.product.img, [Validators.required]],
+          title: [this.product.title, [Validators.required]],
+          description: [this.product.description, [Validators.required]],
+          type: [this.product.type, [Validators.required]],
+          weight: [this.product.weight, [Validators.required]],
+          cost: [this.product.cost, [Validators.required]]
+        });
+        this.creationMode ? this.title = 'Создание товара' : this.title = 'Редактирование товара';
+        this.creationMode ? this.recordId = null : this.recordId = this.product.id;
         break;
       }
     }

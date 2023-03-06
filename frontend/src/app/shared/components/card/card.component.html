@@ -3,7 +3,7 @@
     <div class="card" style="width: 18rem;">
       <img [src]="employee.img" alt="Фото сотрудника" class="card-img-top">
       <div class="card-body">
-        <h5 class="card-title" (click)="openDetails(employee.id)">{{employee.name}} {{employee.surname}}</h5>
+        <h5 class="card-title" (click)="openDetails(employee)">{{employee.name}} {{employee.surname}}</h5>
         <div class="d-flex justify-content-center mt-3">
           <button class="btn btn-primary" (click)="edit(employee)">Редактировать</button>
           <button class="btn btn-danger" (click)="delete(employee.id)">Удалить</button>
@@ -28,7 +28,7 @@
       <div class="card" style="width: 18rem;">
         <img [src]="provider.img" alt="Логотип поставщика" class="card-img-top">
         <div class="card-body">
-          <h5 (click)="openDetails(provider.id)" class="card-title">{{provider.title}}</h5>
+          <h5 (click)="openDetails(provider)" class="card-title">{{provider.title}}</h5>
           <h6 class="text-center">{{provider.subtitle}}</h6>
           <p>{{provider.description}}</p>
           <div class="d-flex justify-content-center mt-3">
@@ -41,10 +41,23 @@
     <div class="card" style="width: 18rem;">
       <img [src]="material?.img" alt="Фото материала" class="card-img-top">
       <div class="card-body">
-        <h5 (click)="openDetails(material.id)" class="card-title">{{material.title}}</h5>
+        <h5 (click)="openDetails(material)" class="card-title">{{material.title}}</h5>
         <p>{{material.description}}</p>
         <div class="d-flex justify-content-center mt-3">
           <button class="btn btn-primary" (click)="edit(material)">Редактировать</button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template [ngSwitchCase]="!!product">
+    <div class="card" style="width: 18rem;">
+      <img [src]="product.img" alt="Фото изделия" class="card-img-top">
+      <div class="card-body">
+        <h5 (click)="openDetails(product)" class="card-title">{{product.title}}</h5>
+        <p>{{product.description}}</p>
+        <div class="d-flex justify-content-center mt-3">
+          <button class="btn btn-primary" (click)="edit(product)">Редактировать</button>
+          <button class="btn btn-danger" (click)="delete(product.id)">Удалить</button>
         </div>
       </div>
     </div>

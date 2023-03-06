@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Employee } from '../../../modules/employees/classes/employee';
+import { Product } from '../../../modules/products/classes/product';
 
 @Component({
   selector: 'app-card-details',
@@ -8,6 +9,5 @@ import { Employee } from '../../../modules/employees/classes/employee';
 })
 export class CardDetailsComponent {
   @Input() employee: Employee = null;
-
-  constructor() { }
+  @Input() product: Product = null;
 }

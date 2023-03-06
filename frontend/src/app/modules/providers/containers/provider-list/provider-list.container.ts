@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Provider } from '../../classes/provider';
 import { Subscription } from 'rxjs';
 import { ProvidersFacade } from '../../providers.facade';
+import { Material } from '../../../materials/classes/material';
 
 @Component({
   selector: 'app-provider-list',
@@ -30,8 +31,8 @@ export class ProviderListContainer implements OnInit, OnDestroy {
     this.providerSubscription.unsubscribe();
   }
 
-  openMaterial(id: string) {
-    this.facade.openMaterial(id);
+  openMaterial(details: Material) {
+    this.facade.openMaterial(details.id);
   }
 
   addProvider() {

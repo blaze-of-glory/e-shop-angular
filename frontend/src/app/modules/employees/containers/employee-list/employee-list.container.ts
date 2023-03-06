@@ -31,8 +31,9 @@ export class EmployeeListContainer implements OnInit, OnDestroy {
     this.employeeSubscription.unsubscribe();
   }
 
-  openDetails(id: string) {
-    this.facade.openDetails(id);
+  openDetails(details: Employee) {
+    this.setCurrentEmployee(details);
+    this.facade.openDetails(details.id);
   }
 
   deleteEmployee(id: string) {
