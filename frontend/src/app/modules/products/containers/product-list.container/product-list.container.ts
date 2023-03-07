@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Product } from '../../classes/product';
-import { Subscription } from 'rxjs';
 import { ProductsFacade } from '../../products.facade';
 import { ActivatedRoute } from '@angular/router';
+import { SubscriptionHelper } from '../../../../shared/helpers/subscription.helper';
 
 @Component({
   selector: 'product-list.container',
@@ -12,8 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ProductListContainer implements OnInit, OnDestroy {
   public products: Product[] = null;
   public product: Product = null;
-  private productsSubscription: Subscription = null;
-  private productSubscription: Subscription = null;
+  private readonly subscriptionHelper: SubscriptionHelper = new SubscriptionHelper();
 
   constructor(private facade: ProductsFacade, private route: ActivatedRoute) { }
 
@@ -21,17 +20,16 @@ export class ProductListContainer implements OnInit, OnDestroy {
     this.setCurrentProviderId();
     this.setCurrentMaterialId();
     this.facade.loadProducts();
-    this.productsSubscription = this.facade.getProducts$().subscribe(products => {
+    this.subscriptionHelper.next = this.facade.getProducts$().subscribe(products => {
       this.products = products;
     });
-    this.productSubscription = this.facade.getCurrentProduct$().subscribe(product => {
+    this.subscriptionHelper.next = this.facade.getCurrentProduct$().subscribe(product => {
       this.product = product;
     });
   }
 
   ngOnDestroy(): void {
-    this.productsSubscription.unsubscribe();
-    this.productSubscription.unsubscribe();
+    this.subscriptionHelper.unsubscribeAll();
   }
 
   setCurrentProviderId() {

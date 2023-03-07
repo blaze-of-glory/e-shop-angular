@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EmployeesFacade } from '../../employees.facade';
-import { Subscription } from 'rxjs';
 import { Employee } from '../../classes/employee';
+import { SubscriptionHelper } from '../../../../shared/helpers/subscription.helper';
 
 @Component({
   selector: 'app-employee-list',
@@ -11,24 +11,22 @@ import { Employee } from '../../classes/employee';
 export class EmployeeListContainer implements OnInit, OnDestroy {
   public employees: Employee[] = null;
   public employee: Employee = null;
-  private employeesSubscription: Subscription = null;
-  private employeeSubscription: Subscription = null;
+  private readonly subscriptionHelper: SubscriptionHelper = new SubscriptionHelper();
 
   constructor(private facade: EmployeesFacade) { }
 
   ngOnInit(): void {
     this.facade.loadEmployees();
-    this.employeesSubscription = this.facade.getEmployees$().subscribe(employees => {
+    this.subscriptionHelper.next = this.facade.getEmployees$().subscribe(employees => {
       this.employees = employees;
     });
-    this.employeeSubscription = this.facade.getCurrentEmployee$().subscribe(employee => {
+    this.subscriptionHelper.next = this.facade.getCurrentEmployee$().subscribe(employee => {
       this.employee = employee;
-    })
+    });
   }
 
   ngOnDestroy(): void {
-    this.employeesSubscription.unsubscribe();
-    this.employeeSubscription.unsubscribe();
+    this.subscriptionHelper.unsubscribeAll();
   }
 
   openDetails(details: Employee) {

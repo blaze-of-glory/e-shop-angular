@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Shop } from '../../classes/shop';
-import { Subscription } from 'rxjs';
 import { ShopsFacade } from '../../shops.facade';
+import { SubscriptionHelper } from '../../../../shared/helpers/subscription.helper';
 
 @Component({
   selector: 'app-shop-list',
@@ -11,24 +11,22 @@ import { ShopsFacade } from '../../shops.facade';
 export class ShopListContainer implements OnInit, OnDestroy {
   public shops: Shop[] = null;
   public shop: Shop = null;
-  private shopsSubscription: Subscription = null;
-  private shopSubscription: Subscription = null;
+  private readonly subscriptionHelper: SubscriptionHelper = new SubscriptionHelper();
 
   constructor(private facade: ShopsFacade) { }
 
   ngOnInit(): void {
     this.facade.loadShops();
-    this.shopsSubscription = this.facade.getShops$().subscribe(shops => {
+    this.subscriptionHelper.next = this.facade.getShops$().subscribe(shops => {
       this.shops = shops;
     });
-    this.shopSubscription = this.facade.getCurrentShop$().subscribe(shop => {
+    this.subscriptionHelper.next = this.facade.getCurrentShop$().subscribe(shop => {
       this.shop = shop;
     });
   }
 
   ngOnDestroy(): void {
-    this.shopsSubscription.unsubscribe();
-    this.shopSubscription.unsubscribe();
+    this.subscriptionHelper.unsubscribeAll();
   }
 
   addShop() {

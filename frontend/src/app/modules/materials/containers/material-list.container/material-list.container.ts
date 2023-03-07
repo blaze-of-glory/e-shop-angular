@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Material } from '../../classes/material';
-import { Subscription } from 'rxjs';
 import { MaterialsFacade } from '../../materials.facade';
 import { ActivatedRoute } from '@angular/router';
+import { SubscriptionHelper } from '../../../../shared/helpers/subscription.helper';
 
 @Component({
   selector: 'app-material-list.container',
@@ -12,25 +12,23 @@ import { ActivatedRoute } from '@angular/router';
 export class MaterialListContainer implements OnInit, OnDestroy {
   public materials: Material[] = null;
   public material: Material = null;
-  private materialsSubscription: Subscription = null;
-  private materialSubscription: Subscription = null;
+  private readonly subscriptionHelper: SubscriptionHelper = new SubscriptionHelper();
 
   constructor(private facade: MaterialsFacade, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.setCurrentProviderId();
     this.facade.loadMaterials();
-    this.materialsSubscription = this.facade.getMaterials$().subscribe(materials => {
+    this.subscriptionHelper.next = this.facade.getMaterials$().subscribe(materials => {
       this.materials = materials;
     });
-    this.materialSubscription = this.facade.getCurrentMaterial$().subscribe(material => {
+    this.subscriptionHelper.next = this.facade.getCurrentMaterial$().subscribe(material => {
       this.material = material;
     });
   }
 
   ngOnDestroy(): void {
-    this.materialsSubscription.unsubscribe();
-    this.materialSubscription.unsubscribe();
+    this.subscriptionHelper.unsubscribeAll();
   }
 
   setCurrentProviderId() {

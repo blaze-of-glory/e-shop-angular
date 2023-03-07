@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Provider } from '../../classes/provider';
-import { Subscription } from 'rxjs';
 import { ProvidersFacade } from '../../providers.facade';
 import { Material } from '../../../materials/classes/material';
+import { SubscriptionHelper } from '../../../../shared/helpers/subscription.helper';
 
 @Component({
   selector: 'app-provider-list',
@@ -12,23 +12,22 @@ import { Material } from '../../../materials/classes/material';
 export class ProviderListContainer implements OnInit, OnDestroy {
   public providers: Provider[] = null;
   public provider: Provider = null;
-  private providersSubscription: Subscription = null;
-  private providerSubscription: Subscription = null;
+  private readonly subscriptionHelper: SubscriptionHelper = new SubscriptionHelper();
+
   constructor(private facade: ProvidersFacade) { }
 
   ngOnInit(): void {
     this.facade.loadProviders();
-    this.providersSubscription = this.facade.getProviders$().subscribe(providers => {
+    this.subscriptionHelper.next = this.facade.getProviders$().subscribe(providers => {
       this.providers = providers;
     });
-    this.providerSubscription = this.facade.getCurrentProvider$().subscribe(provider => {
+    this.subscriptionHelper.next = this.facade.getCurrentProvider$().subscribe(provider => {
       this.provider = provider;
     });
   }
 
   ngOnDestroy(): void {
-    this.providersSubscription.unsubscribe();
-    this.providerSubscription.unsubscribe();
+    this.subscriptionHelper.unsubscribeAll();
   }
 
   openMaterial(details: Material) {
