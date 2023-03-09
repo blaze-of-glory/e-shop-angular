@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { EmployeesApi } from '../../modules/employees/api/employees.api';
-import { ROUTER_NAMES } from '../../shared/constants/router-names';
+import { ROUTER_NAMES } from '../constants/router-names';
 import { ProductsApi } from '../../modules/products/api/products.api';
 
 @Injectable({
