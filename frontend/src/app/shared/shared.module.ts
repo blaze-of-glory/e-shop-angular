@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from "./components/header/header.component";
-import { RouterLink, RouterLinkWithHref } from "@angular/router";
+import { RouterLink } from "@angular/router";
 import { FooterComponent } from './components/footer/footer.component';
 import { CardComponent } from './components/card/card.component';
 import { CardDetailsComponent } from './components/card-details/card-details.component';
@@ -28,7 +28,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     ],
     imports: [
         CommonModule,
-        RouterLinkWithHref,
+        RouterLink,
         RouterLink,
         ReactiveFormsModule
     ]
