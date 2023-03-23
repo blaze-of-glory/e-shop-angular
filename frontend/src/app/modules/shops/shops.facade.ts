@@ -1,70 +1,49 @@
 import { Injectable } from '@angular/core';
 import { ShopsApi } from './api/shops.api';
-import { ShopsState } from './state/shops.state';
 import { Observable } from 'rxjs';
 import { Shop } from './classes/shop';
+import { Store } from '@ngrx/store';
+import { selectAllShops, selectCurrentShop } from './store/shops.selectors';
+import { createShop, deleteShop, editShop, fetchShops, setCurrentShop } from './store/shops.actions';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShopsFacade {
 
-  constructor(private api: ShopsApi, private state: ShopsState) { }
-
-  isLoading$(): Observable<boolean> {
-    return this.state.isLoading$();
-  }
+  constructor(private api: ShopsApi, private store: Store) { }
 
   getShops$(): Observable<Shop[]> {
-    return this.state.getShops$();
+    return this.store.select(selectAllShops);
   }
 
   loadShops() {
-    this.api.getAllShops().subscribe((shops: Shop[]) => this.state.setShops(shops));
+    this.store.dispatch(fetchShops());
   }
 
   getCurrentShop$(): Observable<Shop> {
-    return this.state.getCurrentShop$();
+    return this.store.select(selectCurrentShop);
   }
 
-  setCurrentShop(shop: Shop) {
-    this.state.setCurrentShop(shop);
+  setCurrentShop(currentShop: Shop) {
+    this.store.dispatch(setCurrentShop({ currentShop }));
   }
 
   addShop() {
     this.setCurrentShop(new Shop());
   }
 
-  createShop(shop: Shop) {
-    this.state.setLoading(true);
-    this.api.createShop(shop).subscribe(
-      () => {
-        this.loadShops();
-        this.setCurrentShop(null);
-      },
-      error => console.log(error),
-      () => this.state.setLoading(false)
-    );
+  createShop(currentShop: Shop) {
+    this.store.dispatch(createShop({ currentShop }));
+    this.store.dispatch(setCurrentShop({ currentShop: null }));
   }
 
-  editShop(shop: Shop) {
-    this.state.setLoading(true);
-    this.api.editShop(shop.id, shop).subscribe(
-      () => {
-        this.loadShops();
-        this.setCurrentShop(null);
-      },
-      error => console.log(error),
-      () => this.state.setLoading(false)
-    );
+  editShop(currentShop: Shop) {
+    this.store.dispatch(editShop({ currentShop }));
+    this.store.dispatch(setCurrentShop({ currentShop: null }));
   }
 
-  deleteShop(id: string) {
-    this.state.setLoading(true);
-    this.api.deleteShop(id).subscribe(
-      () => this.loadShops(),
-      error => console.log(error),
-      () => this.state.setLoading(false)
-    );
+  deleteShop(currentShop: Shop) {
+    this.store.dispatch(deleteShop({ currentShop }));
   }
 }

@@ -45,8 +45,8 @@ export class ShopListContainer implements OnInit, OnDestroy {
     this.facade.editShop(shop);
   }
 
-  deleteShop(id: string) {
-    this.facade.deleteShop(id);
+  deleteShop(shop: Shop) {
+    this.facade.deleteShop(shop);
   }
 
   isCreationMode(): boolean {

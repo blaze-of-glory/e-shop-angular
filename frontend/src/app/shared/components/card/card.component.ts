@@ -19,7 +19,7 @@ export class CardComponent {
 
   @Output() openDetailsEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output() editEvent: EventEmitter<any> = new EventEmitter<any>();
-  @Output() deleteEvent: EventEmitter<string> = new EventEmitter<string>();
+  @Output() deleteEvent: EventEmitter<any> = new EventEmitter<any>();
 
   openDetails(details: Employee | Provider | Material | Product) {
     this.openDetailsEvent.emit(details);
@@ -29,7 +29,7 @@ export class CardComponent {
     this.editEvent.emit(card);
   }
 
-  delete(id: string) {
-    this.deleteEvent.emit(id);
+  delete(card: any) {
+    this.deleteEvent.emit(card);
   }
 }
