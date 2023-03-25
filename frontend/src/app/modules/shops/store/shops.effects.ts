@@ -7,7 +7,7 @@ import { Shop } from '../classes/shop';
 
 @Injectable()
 export class ShopsEffects {
-  setShops$ = createEffect(
+  getShops$ = createEffect(
     () => this.actions$.pipe(
       ofType(getShops),
       mergeMap(() => this.api.getAllShops().pipe(map(shops => setShops({shops})
@@ -49,8 +49,6 @@ export class ShopsEffects {
       )
     )
   );
-
-
 
   constructor(private actions$:Actions, private api: ShopsApi) {  }
 }

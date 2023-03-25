@@ -1,36 +1,34 @@
 import { Injectable } from '@angular/core';
 import { EmployeesApi } from './api/employees.api';
-import { EmployeesState } from './state/employees.state';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { ROUTER_LINKS } from '../../shared/constants/router-links';
 import { Employee } from './classes/employee';
+import { Store } from '@ngrx/store';
+import { createEmployee, deleteEmployee, editEmployee, getEmployees, setCurrentEmployee } from './store/employees.actions';
+import { selectAllEmployees, selectCurrentEmployee } from './store/employees.selectors';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmployeesFacade {
 
-  constructor(private api: EmployeesApi, private state: EmployeesState, private router: Router) { }
-
-  isLoading$(): Observable<boolean> {
-    return this.state.isLoading$();
-  }
+  constructor(private api: EmployeesApi, private store: Store, private router: Router) { }
 
   getEmployees$(): Observable<Employee[]> {
-    return this.state.getEmployees$();
+    return this.store.select(selectAllEmployees);
   }
 
-  loadEmployees() {
-    this.api.getAllEmployees().subscribe((employees: Employee[]) => this.state.setEmployees(employees));
+  setEmployees() {
+    this.store.dispatch(getEmployees())
   }
 
   getCurrentEmployee$(): Observable<Employee> {
-    return this.state.getCurrentEmployee$();
+    return this.store.select(selectCurrentEmployee);
   }
 
-  setCurrentEmployee(employee: Employee) {
-    this.state.setCurrentEmployee(employee);
+  setCurrentEmployee(currentEmployee: Employee) {
+    this.store.dispatch(setCurrentEmployee({ currentEmployee }));
   }
 
   openDetails(id: string) {
@@ -38,39 +36,20 @@ export class EmployeesFacade {
   }
 
   addEmployee() {
-     this.setCurrentEmployee(new Employee());
+    this.setCurrentEmployee(new Employee());
   }
 
-  createEmployee(employee: Employee) {
-    this.state.setLoading(true);
-    this.api.createEmployee(employee).subscribe(
-      () => {
-        this.loadEmployees();
-        this.setCurrentEmployee(null);
-      },
-      error => console.log(error),
-      () => this.state.setLoading(false)
-    );
+  createEmployee(currentEmployee: Employee) {
+    this.store.dispatch(createEmployee({ currentEmployee }));
+    this.setCurrentEmployee(null);
   }
 
-  editEmployee(employee: Employee) {
-    this.state.setLoading(true);
-    this.api.editEmployee(employee.id, employee).subscribe(
-      () => {
-        this.loadEmployees();
-        this.setCurrentEmployee(null);
-      },
-      error => console.log(error),
-      () => this.state.setLoading(false)
-    );
+  editEmployee(currentEmployee: Employee) {
+    this.store.dispatch(editEmployee({ currentEmployee }));
+    this.setCurrentEmployee(null);
   }
 
-  deleteEmployee(id: string) {
-    this.state.setLoading(true);
-    this.api.deleteEmployee(id).subscribe(
-      () => this.loadEmployees(),
-      error => console.log(error),
-      () => this.state.setLoading(false)
-    );
+  deleteEmployee(currentEmployee: Employee) {
+    this.store.dispatch(deleteEmployee({ currentEmployee }));
   }
 }

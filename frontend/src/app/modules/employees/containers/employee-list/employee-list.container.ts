@@ -16,7 +16,7 @@ export class EmployeeListContainer implements OnInit, OnDestroy {
   constructor(private facade: EmployeesFacade) { }
 
   ngOnInit(): void {
-    this.facade.loadEmployees();
+    this.facade.setEmployees();
     this.subscriptionHelper.next = this.facade.getEmployees$().subscribe(employees => {
       this.employees = employees;
     });
@@ -34,8 +34,8 @@ export class EmployeeListContainer implements OnInit, OnDestroy {
     this.facade.openDetails(details.id);
   }
 
-  deleteEmployee(id: string) {
-    this.facade.deleteEmployee(id);
+  deleteEmployee(employee: Employee) {
+    this.facade.deleteEmployee(employee);
   }
 
   addEmployee() {

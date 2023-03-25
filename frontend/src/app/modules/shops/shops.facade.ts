@@ -35,12 +35,12 @@ export class ShopsFacade {
 
   createShop(currentShop: Shop) {
     this.store.dispatch(createShop({ currentShop }));
-    this.store.dispatch(setCurrentShop({ currentShop: null }));
+    this.setCurrentShop(null);
   }
 
   editShop(currentShop: Shop) {
     this.store.dispatch(editShop({ currentShop }));
-    this.store.dispatch(setCurrentShop({ currentShop: null }));
+    this.setCurrentShop(null);
   }
 
   deleteShop(currentShop: Shop) {
