@@ -16,7 +16,7 @@ export class ShopListContainer implements OnInit, OnDestroy {
   constructor(private facade: ShopsFacade) { }
 
   ngOnInit(): void {
-    this.facade.loadShops();
+    this.facade.setShops();
     this.subscriptionHelper.next = this.facade.getShops$().subscribe(shops => {
       this.shops = shops;
     });

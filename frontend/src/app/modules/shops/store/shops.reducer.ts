@@ -1,10 +1,10 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { shopsInitialState, ShopsState } from './shops.state';
-import { loadShops, setCurrentShop } from './shops.actions';
+import { setShops, setCurrentShop } from './shops.actions';
 
 export const createShopsReducer = createReducer<ShopsState>(
   shopsInitialState,
-  on(loadShops, (state, action) => ({
+  on(setShops, (state, action) => ({
     ...state,
     shops: action.shops
   })),

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Shop } from './classes/shop';
 import { Store } from '@ngrx/store';
 import { selectAllShops, selectCurrentShop } from './store/shops.selectors';
-import { createShop, deleteShop, editShop, fetchShops, setCurrentShop } from './store/shops.actions';
+import { createShop, deleteShop, editShop, getShops, setCurrentShop } from './store/shops.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +17,8 @@ export class ShopsFacade {
     return this.store.select(selectAllShops);
   }
 
-  loadShops() {
-    this.store.dispatch(fetchShops());
+  setShops() {
+    this.store.dispatch(getShops());
   }
 
   getCurrentShop$(): Observable<Shop> {

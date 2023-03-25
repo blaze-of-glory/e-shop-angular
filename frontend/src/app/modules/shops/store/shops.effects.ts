@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ShopsApi } from '../api/shops.api';
-import { createShop, deleteShop, editShop, fetchShops, loadShops } from './shops.actions';
+import { createShop, deleteShop, editShop, getShops, setShops } from './shops.actions';
 import { concatMap, map, mergeMap } from 'rxjs';
 import { Shop } from '../classes/shop';
 
 @Injectable()
 export class ShopsEffects {
-  loadShops$ = createEffect(
+  setShops$ = createEffect(
     () => this.actions$.pipe(
-      ofType(fetchShops),
-      mergeMap(() => this.api.getAllShops().pipe(map(shops => loadShops({shops})
+      ofType(getShops),
+      mergeMap(() => this.api.getAllShops().pipe(map(shops => setShops({shops})
           )
         )
       )
@@ -22,7 +22,7 @@ export class ShopsEffects {
       ofType(createShop),
       concatMap((payload: { currentShop: Shop }) => this.api.createShop(payload.currentShop)
         .pipe(
-          map(() => fetchShops())
+          map(() => getShops())
         )
       )
     )
@@ -33,7 +33,7 @@ export class ShopsEffects {
       ofType(editShop),
       concatMap((payload: { currentShop: Shop }) => this.api.editShop(payload.currentShop.id, payload.currentShop)
         .pipe(
-          map(() => fetchShops())
+          map(() => getShops())
         )
       )
     )
@@ -44,7 +44,7 @@ export class ShopsEffects {
       ofType(deleteShop),
       concatMap((payload: { currentShop: Shop }) => this.api.deleteShop(payload.currentShop.id)
         .pipe(
-          map(() => fetchShops()),
+          map(() => getShops()),
         )
       )
     )
