@@ -17,7 +17,7 @@ export class ProviderListContainer implements OnInit, OnDestroy {
   constructor(private facade: ProvidersFacade) { }
 
   ngOnInit(): void {
-    this.facade.loadProviders();
+    this.facade.setProviders();
     this.subscriptionHelper.next = this.facade.getProviders$().subscribe(providers => {
       this.providers = providers;
     });

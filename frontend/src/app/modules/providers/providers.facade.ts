@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ProvidersApi } from './api/providers.api';
-import { ProvidersState } from './state/providers.state';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Provider } from './classes/provider';
 import { ROUTER_LINKS } from '../../shared/constants/router-links';
+import { Store } from '@ngrx/store';
+import { selectAllProviders, selectCurrentProvider } from './store/providers.selectors';
+import { createProvider, editProvider, getProviders, setCurrentProvider } from './store/providers.actions';
 
 
 @Injectable({
@@ -12,26 +14,22 @@ import { ROUTER_LINKS } from '../../shared/constants/router-links';
 })
 export class ProvidersFacade {
 
-  constructor(private api: ProvidersApi, private state: ProvidersState, private router: Router) { }
-
-  isLoading$(): Observable<boolean> {
-    return this.state.isLoading$();
-  }
+  constructor(private api: ProvidersApi, private store: Store, private router: Router) { }
 
   getProviders$(): Observable<Provider[]> {
-    return this.state.getProviders$();
+    return this.store.select(selectAllProviders);
   }
 
-  loadProviders() {
-    this.api.getAllProviders().subscribe((providers: Provider[]) => this.state.setProviders(providers));
+  setProviders() {
+    this.store.dispatch(getProviders());
   }
 
   getCurrentProvider$(): Observable<Provider> {
-    return this.state.getCurrentProvider$();
+    return this.store.select(selectCurrentProvider);
   }
 
-  setCurrentProvider(provider: Provider) {
-    this.state.setCurrentProvider(provider);
+  setCurrentProvider(currentProvider: Provider) {
+    this.store.dispatch(setCurrentProvider({ currentProvider }));
   }
 
   openMaterial(id: string) {
@@ -42,27 +40,13 @@ export class ProvidersFacade {
     this.setCurrentProvider(new Provider());
   }
 
-  createProvider(provider: Provider) {
-    this.state.setLoading(true);
-    this.api.createProvider(provider).subscribe(
-      () => {
-        this.loadProviders();
-        this.setCurrentProvider(null);
-      },
-      error => console.log(error),
-      () => this.state.setLoading(false)
-    );
+  createProvider(currentProvider: Provider) {
+    this.store.dispatch(createProvider({ currentProvider }));
+    this.setCurrentProvider(null);
   }
 
-  editProvider(provider: Provider) {
-    this.state.setLoading(true);
-    this.api.editProvider(provider.id, provider).subscribe(
-      () => {
-        this.loadProviders();
-        this.setCurrentProvider(null);
-      },
-      error => console.log(error),
-      () => this.state.setLoading(false)
-    );
+  editProvider(currentProvider: Provider) {
+    this.store.dispatch(editProvider({ currentProvider }));
+    this.setCurrentProvider(null);
   }
 }
