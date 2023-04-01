@@ -9,6 +9,7 @@ import { ShopListContainer } from './modules/shops/containers/shop-list/shop-lis
 import { ProviderListContainer } from './modules/providers/containers/provider-list/provider-list.container';
 import { MaterialListContainer } from './modules/materials/containers/material-list.container/material-list.container';
 import { ProductListContainer } from './modules/products/containers/product-list.container/product-list.container';
+import { MaterialsResolver } from './modules/materials/materials.resolver';
 
 const routes: Routes = [
   {
@@ -23,6 +24,7 @@ const routes: Routes = [
   {
     path: ROUTER_NAMES.MATERIALS,
     component: MaterialListContainer,
+    resolve: [MaterialsResolver],
     pathMatch: 'full',
   },
   {

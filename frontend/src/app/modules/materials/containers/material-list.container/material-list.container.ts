@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Material } from '../../classes/material';
 import { MaterialsFacade } from '../../materials.facade';
-import { ActivatedRoute } from '@angular/router';
 import { SubscriptionHelper } from '../../../../shared/helpers/subscription.helper';
 
 @Component({
@@ -14,11 +13,10 @@ export class MaterialListContainer implements OnInit, OnDestroy {
   public material: Material = null;
   private readonly subscriptionHelper: SubscriptionHelper = new SubscriptionHelper();
 
-  constructor(private facade: MaterialsFacade, private route: ActivatedRoute) { }
+  constructor(private facade: MaterialsFacade) { }
 
   ngOnInit(): void {
-    this.setCurrentProviderId();
-    this.facade.loadMaterials();
+    this.facade.setMaterials();
     this.subscriptionHelper.next = this.facade.getMaterials$().subscribe(materials => {
       this.materials = materials;
     });
@@ -29,10 +27,6 @@ export class MaterialListContainer implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptionHelper.unsubscribeAll();
-  }
-
-  setCurrentProviderId() {
-    this.facade.setCurrentProviderId(this.route.snapshot.params['provider']);
   }
 
   openMaterial(details: Material) {

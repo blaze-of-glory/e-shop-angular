@@ -1,72 +1,66 @@
 import { Injectable } from '@angular/core';
-import { MaterialsApi } from './api/materials.api';
-import { MaterialsState } from './state/materials.state';
+import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { Material } from './classes/material';
 import { ROUTER_LINKS } from '../../shared/constants/router-links';
+import { selectAllMaterials, selectCurrentMaterial, selectRelatedProviderId } from './store/materials.selectors';
+import { createMaterial, editMaterial, getMaterials, setCurrentMaterial } from './store/materials.actions';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MaterialsFacade {
 
-  constructor(private api: MaterialsApi, private state: MaterialsState, private router: Router) { }
-
-  isLoading$(): Observable<boolean> {
-    return this.state.isLoading$();
-  }
+  constructor(private store: Store, private router: Router) { }
 
   getMaterials$(): Observable<Material[]> {
-    return this.state.getMaterials$();
+    return this.store.select(selectAllMaterials);
   }
 
-  loadMaterials() {
-    this.api.getCurrentProviderMaterials(this.state.getCurrentProviderId())
-      .subscribe((materials: Material[]) => this.state.setMaterials(materials));
+  setMaterials() {
+    this.store.select(selectRelatedProviderId)
+      .pipe(take(1))
+      .subscribe(relatedProviderId => {
+        this.store.dispatch(getMaterials({ relatedProviderId }));
+      });
   }
 
   getCurrentMaterial$(): Observable<Material> {
-    return this.state.getCurrentMaterial$();
+    return this.store.select(selectCurrentMaterial);
   }
 
-  setCurrentMaterial(material: Material) {
-    this.state.setCurrentMaterial(material);
-  }
-
-  setCurrentProviderId(id: string) {
-    this.state.setCurrentProviderId(id);
+  setCurrentMaterial(currentMaterial: Material) {
+    this.store.dispatch(setCurrentMaterial({ currentMaterial }))
   }
 
   openProducts(id: string) {
-    this.router.navigateByUrl(ROUTER_LINKS.PROVIDERS + `/${this.state.getCurrentProviderId()}/${id}`);
+    this.store.select(selectRelatedProviderId)
+      .pipe(take(1))
+      .subscribe(relatedProviderId => {
+        this.router.navigateByUrl(ROUTER_LINKS.PROVIDERS + `/${relatedProviderId}/${id}`);
+      });
   }
 
   addMaterial() {
     this.setCurrentMaterial(new Material());
   }
 
-  createMaterial(material: Material) {
-    this.state.setLoading(true);
-    this.api.createMaterial(material, this.state.getCurrentProviderId()).subscribe(
-      () => {
-        this.loadMaterials();
-        this.setCurrentMaterial(null);
-      },
-      error => console.log(error),
-      () => this.state.setLoading(false)
-    );
+  createMaterial(currentMaterial: Material) {
+    this.store.select(selectRelatedProviderId)
+      .pipe(take(1))
+      .subscribe(relatedProviderId => {
+        this.store.dispatch(createMaterial({ currentMaterial, relatedProviderId }))
+      });
+    this.setCurrentMaterial(null);
   }
 
-  editMaterial(material: Material) {
-    this.state.setLoading(true);
-    this.api.editMaterial(material.id, material).subscribe(
-      () => {
-        this.loadMaterials();
+  editMaterial(currentMaterial: Material) {
+    this.store.select(selectRelatedProviderId)
+      .pipe(take(1))
+      .subscribe(relatedProviderId => {
+        this.store.dispatch(editMaterial({ currentMaterial, relatedProviderId }));
         this.setCurrentMaterial(null);
-      },
-      error => console.log(error),
-      () => this.state.setLoading(false)
-    );
+      });
   }
 }
