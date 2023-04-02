@@ -7,7 +7,7 @@ import { MaterialsApi } from '../api/materials.api';
 
 @Injectable()
 export class MaterialsEffects {
-  getProviders$ = createEffect(
+  getMaterials$ = createEffect(
     () => this.actions$.pipe(
       ofType(getMaterials),
       mergeMap((payload: { relatedProviderId: string }) => this.api.getCurrentProviderMaterials(payload.relatedProviderId)
@@ -18,7 +18,7 @@ export class MaterialsEffects {
     )
   );
 
-  createProvider$ = createEffect(
+  createMaterial$ = createEffect(
     () => this.actions$.pipe(
       ofType(createMaterial),
       concatMap((payload: { currentMaterial: Material, relatedProviderId: string }) => this.api.createMaterial(payload.currentMaterial, payload.relatedProviderId)
@@ -29,7 +29,7 @@ export class MaterialsEffects {
     )
   );
 
-  editProvider$ = createEffect(
+  editMaterial$ = createEffect(
     () => this.actions$.pipe(
       ofType(editMaterial),
       concatMap((payload: { currentMaterial: Material, relatedProviderId: string }) => this.api.editMaterial( payload.currentMaterial.id,payload.currentMaterial)

@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Product } from '../../classes/product';
 import { ProductsFacade } from '../../products.facade';
-import { ActivatedRoute } from '@angular/router';
 import { SubscriptionHelper } from '../../../../shared/helpers/subscription.helper';
 
 @Component({
@@ -14,12 +13,10 @@ export class ProductListContainer implements OnInit, OnDestroy {
   public product: Product = null;
   private readonly subscriptionHelper: SubscriptionHelper = new SubscriptionHelper();
 
-  constructor(private facade: ProductsFacade, private route: ActivatedRoute) { }
+  constructor(private facade: ProductsFacade) { }
 
   ngOnInit(): void {
-    this.setCurrentProviderId();
-    this.setCurrentMaterialId();
-    this.facade.loadProducts();
+    this.facade.setProducts();
     this.subscriptionHelper.next = this.facade.getProducts$().subscribe(products => {
       this.products = products;
     });
@@ -30,14 +27,6 @@ export class ProductListContainer implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptionHelper.unsubscribeAll();
-  }
-
-  setCurrentProviderId() {
-    this.facade.setCurrentProviderId(this.route.snapshot.params['provider']);
-  }
-
-  setCurrentMaterialId() {
-    this.facade.setCurrentMaterialId(this.route.snapshot.params['material']);
   }
 
   openDetails(details: Product) {
@@ -61,8 +50,8 @@ export class ProductListContainer implements OnInit, OnDestroy {
     this.facade.editProduct(product);
   }
 
-  deleteProduct(id: string) {
-    this.facade.deleteProduct(id);
+  deleteProduct(product: Product) {
+    this.facade.deleteProduct(product);
   }
 
   isCreationMode(): boolean {

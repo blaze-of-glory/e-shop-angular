@@ -1,85 +1,84 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable, take } from 'rxjs';
 import { Product } from './classes/product';
 import { ROUTER_LINKS } from '../../shared/constants/router-links';
-import { ProductsApi } from './api/products.api';
-import { ProductsState } from './state/products.state';
+import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
+import { selectAllProducts, selectCurrentProduct, selectRelatedMaterialId, selectRelatedProviderId } from './store/products.selectors';
+import { createProduct, deleteProduct, editProduct, getProducts, setCurrentProduct } from './store/products.actions';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsFacade {
 
-  constructor(private api: ProductsApi, private state: ProductsState, private router: Router) { }
-
-  isLoading$(): Observable<boolean> {
-    return this.state.isLoading$();
-  }
+  constructor(private store: Store, private router: Router) { }
 
   getProducts$(): Observable<Product[]> {
-    return this.state.getProducts$();
+    return this.store.select(selectAllProducts);
   }
 
-  loadProducts() {
-    this.api.getRelevantProducts(this.state.getCurrentProviderId(), this.state.getCurrentMaterialId())
-      .subscribe((products: Product[]) => this.state.setProducts(products));
+  setProducts() {
+    forkJoin([
+      this.store.select(selectRelatedProviderId).pipe(take(1)),
+      this.store.select(selectRelatedMaterialId).pipe(take(1))
+    ]).subscribe((relations: string[]) => {
+      const [relatedProviderId, relatedMaterialId] = relations;
+      this.store.dispatch(getProducts({ relatedProviderId, relatedMaterialId }))
+    });
   }
 
   getCurrentProduct$(): Observable<Product> {
-    return this.state.getCurrentProduct$();
+    return this.store.select(selectCurrentProduct);
   }
 
-  setCurrentProduct(product: Product) {
-    this.state.setCurrentProduct(product);
-  }
-
-  setCurrentProviderId(id: string) {
-    this.state.setCurrentProviderId(id);
-  }
-
-  setCurrentMaterialId(id: string) {
-    this.state.setCurrentMaterialId(id);
+  setCurrentProduct(currentProduct: Product) {
+    this.store.dispatch(setCurrentProduct({ currentProduct }));
   }
 
   openDetails(id: string) {
-    this.router.navigateByUrl(ROUTER_LINKS.PRODUCTS + `/${id}`);
+    forkJoin([
+      this.store.select(selectRelatedProviderId).pipe(take(1)),
+      this.store.select(selectRelatedMaterialId).pipe(take(1))
+    ]).subscribe((relations: string[]) => {
+      const [relatedProviderId, relatedMaterialId] = relations;
+      this.router.navigateByUrl(ROUTER_LINKS.PROVIDERS + `/${relatedProviderId}/${relatedMaterialId}/${id}`)
+    });
   }
 
   addProduct() {
     this.setCurrentProduct(new Product());
   }
 
-  createProduct(product: Product) {
-    this.state.setLoading(true);
-    this.api.createProduct(product, this.state.getCurrentProviderId(), this.state.getCurrentMaterialId()).subscribe(
-      () => {
-        this.loadProducts();
-        this.setCurrentProduct(null);
-      },
-      error => console.log(error),
-      () => this.state.setLoading(false)
-    );
+  createProduct(currentProduct: Product) {
+    forkJoin([
+      this.store.select(selectRelatedProviderId).pipe(take(1)),
+      this.store.select(selectRelatedMaterialId).pipe(take(1))
+    ]).subscribe((relations: string[]) => {
+      const [relatedProviderId, relatedMaterialId] = relations;
+      this.store.dispatch(createProduct({ currentProduct, relatedProviderId, relatedMaterialId }));
+      this.setCurrentProduct(null);
+      });
   }
 
-  editProduct(product: Product) {
-    this.state.setLoading(true);
-    this.api.editProduct(product.id, product).subscribe(
-      () => {
-        this.loadProducts();
-        this.setCurrentProduct(null);
-      },
-      error => console.log(error),
-      () => this.state.setLoading(false)
-    );
+  editProduct(currentProduct: Product) {
+    forkJoin([
+      this.store.select(selectRelatedProviderId).pipe(take(1)),
+      this.store.select(selectRelatedMaterialId).pipe(take(1))
+    ]).subscribe((relations: string[]) => {
+      const [relatedProviderId, relatedMaterialId] = relations;
+      this.store.dispatch(editProduct({ currentProduct, relatedProviderId, relatedMaterialId }));
+      this.setCurrentProduct(null);
+      });
   }
 
-  deleteProduct(id: string) {
-    this.state.setLoading(true);
-    this.api.deleteProduct(id).subscribe(
-      () => this.loadProducts(),
-      error => console.log(error),
-      () => this.state.setLoading(false)
-    );
+  deleteProduct(currentProduct: Product) {
+    forkJoin([
+      this.store.select(selectRelatedProviderId).pipe(take(1)),
+      this.store.select(selectRelatedMaterialId).pipe(take(1))
+    ]).subscribe((relations: string[]) => {
+      const [relatedProviderId, relatedMaterialId] = relations;
+      this.store.dispatch(deleteProduct({ currentProduct, relatedProviderId, relatedMaterialId }))
+    });
   }
 }

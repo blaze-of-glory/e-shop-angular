@@ -50,9 +50,9 @@ export class MaterialsFacade {
     this.store.select(selectRelatedProviderId)
       .pipe(take(1))
       .subscribe(relatedProviderId => {
-        this.store.dispatch(createMaterial({ currentMaterial, relatedProviderId }))
+        this.store.dispatch(createMaterial({ currentMaterial, relatedProviderId }));
+        this.setCurrentMaterial(null);
       });
-    this.setCurrentMaterial(null);
   }
 
   editMaterial(currentMaterial: Material) {

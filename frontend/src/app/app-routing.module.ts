@@ -10,6 +10,7 @@ import { ProviderListContainer } from './modules/providers/containers/provider-l
 import { MaterialListContainer } from './modules/materials/containers/material-list.container/material-list.container';
 import { ProductListContainer } from './modules/products/containers/product-list.container/product-list.container';
 import { MaterialsResolver } from './modules/materials/materials.resolver';
+import { ProductsResolver } from './modules/products/products.resolver';
 
 const routes: Routes = [
   {
@@ -30,15 +31,14 @@ const routes: Routes = [
   {
     path: ROUTER_NAMES.PRODUCTS,
     component: ProductListContainer,
+    resolve: [ProductsResolver],
     pathMatch: "full",
   },
   {
     path: ROUTER_NAMES.PRODUCT,
     component: CardDetailsContainer,
     pathMatch: "full",
-    resolve: {
-      product: CardDetailsResolver
-    }
+    resolve: [CardDetailsResolver]
   },
   {
     path: ROUTER_NAMES.EMPLOYEES,
@@ -49,9 +49,7 @@ const routes: Routes = [
     path: ROUTER_NAMES.EMPLOYEE,
     component: CardDetailsContainer,
     pathMatch: "full",
-    resolve: {
-      employee: CardDetailsResolver
-    }
+    resolve: [CardDetailsResolver]
   },
   {
     path: ROUTER_NAMES.SHOPS,

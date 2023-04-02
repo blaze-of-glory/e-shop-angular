@@ -21,7 +21,7 @@ export class EmployeesEffects {
   getEmployeeById$ = createEffect(
     () => this.actions$.pipe(
       ofType(getEmployeeById),
-      concatMap((payload: { currentEmployee: Employee }) => this.api.getEmployeeById(payload.currentEmployee.id)
+      concatMap((payload: { currentEmployeeId: string }) => this.api.getEmployeeById(payload.currentEmployeeId)
         .pipe(
           map(currentEmployee => setCurrentEmployee({ currentEmployee }))
         )
