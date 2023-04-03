@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { forkJoin, Observable, take } from 'rxjs';
+import { Observable, take, zip } from 'rxjs';
 import { Product } from './classes/product';
 import { ROUTER_LINKS } from '../../shared/constants/router-links';
 import { Store } from '@ngrx/store';
@@ -19,10 +19,7 @@ export class ProductsFacade {
   }
 
   setProducts() {
-    forkJoin([
-      this.store.select(selectRelatedProviderId).pipe(take(1)),
-      this.store.select(selectRelatedMaterialId).pipe(take(1))
-    ]).subscribe((relations: string[]) => {
+    this.getRelations$().subscribe((relations: string[]) => {
       const [relatedProviderId, relatedMaterialId] = relations;
       this.store.dispatch(getProducts({ relatedProviderId, relatedMaterialId }))
     });
@@ -37,10 +34,7 @@ export class ProductsFacade {
   }
 
   openDetails(id: string) {
-    forkJoin([
-      this.store.select(selectRelatedProviderId).pipe(take(1)),
-      this.store.select(selectRelatedMaterialId).pipe(take(1))
-    ]).subscribe((relations: string[]) => {
+    this.getRelations$().subscribe((relations: string[]) => {
       const [relatedProviderId, relatedMaterialId] = relations;
       this.router.navigateByUrl(ROUTER_LINKS.PROVIDERS + `/${relatedProviderId}/${relatedMaterialId}/${id}`)
     });
@@ -51,10 +45,7 @@ export class ProductsFacade {
   }
 
   createProduct(currentProduct: Product) {
-    forkJoin([
-      this.store.select(selectRelatedProviderId).pipe(take(1)),
-      this.store.select(selectRelatedMaterialId).pipe(take(1))
-    ]).subscribe((relations: string[]) => {
+    this.getRelations$().subscribe((relations: string[]) => {
       const [relatedProviderId, relatedMaterialId] = relations;
       this.store.dispatch(createProduct({ currentProduct, relatedProviderId, relatedMaterialId }));
       this.setCurrentProduct(null);
@@ -62,10 +53,7 @@ export class ProductsFacade {
   }
 
   editProduct(currentProduct: Product) {
-    forkJoin([
-      this.store.select(selectRelatedProviderId).pipe(take(1)),
-      this.store.select(selectRelatedMaterialId).pipe(take(1))
-    ]).subscribe((relations: string[]) => {
+    this.getRelations$().subscribe((relations: string[]) => {
       const [relatedProviderId, relatedMaterialId] = relations;
       this.store.dispatch(editProduct({ currentProduct, relatedProviderId, relatedMaterialId }));
       this.setCurrentProduct(null);
@@ -73,12 +61,16 @@ export class ProductsFacade {
   }
 
   deleteProduct(currentProduct: Product) {
-    forkJoin([
-      this.store.select(selectRelatedProviderId).pipe(take(1)),
-      this.store.select(selectRelatedMaterialId).pipe(take(1))
-    ]).subscribe((relations: string[]) => {
+    this.getRelations$().subscribe((relations: string[]) => {
       const [relatedProviderId, relatedMaterialId] = relations;
       this.store.dispatch(deleteProduct({ currentProduct, relatedProviderId, relatedMaterialId }))
     });
+  }
+
+  private getRelations$(): Observable<string[]> {
+    return zip([
+      this.store.select(selectRelatedProviderId),
+      this.store.select(selectRelatedMaterialId)
+    ]).pipe(take(1));
   }
 }
