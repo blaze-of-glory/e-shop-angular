@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Shop } from '../../classes/shop';
-import { ShopsFacade } from '../../shops.facade';
 import { SubscriptionHelper } from '../../../../shared/helpers/subscription.helper';
+import { Store } from '@ngrx/store';
+import { createShop, deleteShop, editShop, getShops, setCurrentShop } from '../../store/shops.actions';
+import { selectAllShops, selectCurrentShop } from '../../store/shops.selectors';
 
 @Component({
   selector: 'app-shop-list',
@@ -13,14 +15,14 @@ export class ShopListContainer implements OnInit, OnDestroy {
   public shop: Shop = null;
   private readonly subscriptionHelper: SubscriptionHelper = new SubscriptionHelper();
 
-  constructor(private facade: ShopsFacade) { }
+  constructor(private store: Store) { }
 
   ngOnInit(): void {
-    this.facade.setShops();
-    this.subscriptionHelper.next = this.facade.getShops$().subscribe(shops => {
+    this.store.dispatch(getShops());
+    this.subscriptionHelper.next = this.store.select(selectAllShops).subscribe(shops => {
       this.shops = shops;
     });
-    this.subscriptionHelper.next = this.facade.getCurrentShop$().subscribe(shop => {
+    this.subscriptionHelper.next = this.store.select(selectCurrentShop).subscribe(shop => {
       this.shop = shop;
     });
   }
@@ -30,23 +32,25 @@ export class ShopListContainer implements OnInit, OnDestroy {
   }
 
   addShop() {
-    this.facade.addShop();
+    this.setCurrentShop(new Shop());
   }
 
-  setCurrentShop(shop: Shop) {
-    this.facade.setCurrentShop(shop);
+  setCurrentShop(currentShop: Shop) {
+    this.store.dispatch(setCurrentShop({ currentShop }));
   }
 
-  createShop(shop: Shop) {
-    this.facade.createShop(shop);
+  createShop(currentShop: Shop) {
+    this.store.dispatch(createShop({ currentShop }));
+    this.setCurrentShop(null);
   }
 
-  editShop(shop: Shop) {
-    this.facade.editShop(shop);
+  editShop(currentShop: Shop) {
+    this.store.dispatch(editShop({ currentShop }));
+    this.setCurrentShop(null);
   }
 
-  deleteShop(shop: Shop) {
-    this.facade.deleteShop(shop);
+  deleteShop(currentShop: Shop) {
+    this.store.dispatch(deleteShop({ currentShop }));
   }
 
   isCreationMode(): boolean {
@@ -54,6 +58,6 @@ export class ShopListContainer implements OnInit, OnDestroy {
   }
 
   cancel() {
-    this.facade.setCurrentShop(null);
+    this.setCurrentShop(null);
   }
 }
