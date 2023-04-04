@@ -1,7 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { EmployeesFacade } from '../../employees.facade';
 import { Employee } from '../../classes/employee';
 import { SubscriptionHelper } from '../../../../shared/helpers/subscription.helper';
+import { Store } from '@ngrx/store';
+import { createEmployee, deleteEmployee, editEmployee, getEmployees, setCurrentEmployee } from '../../store/employees.actions';
+import { selectAllEmployees, selectCurrentEmployee } from '../../store/employees.selectors';
+import { Router } from '@angular/router';
+import { ROUTER_LINKS } from '../../../../shared/constants/router-links';
 
 @Component({
   selector: 'app-employee-list',
@@ -13,14 +17,14 @@ export class EmployeeListContainer implements OnInit, OnDestroy {
   public employee: Employee = null;
   private readonly subscriptionHelper: SubscriptionHelper = new SubscriptionHelper();
 
-  constructor(private facade: EmployeesFacade) { }
+  constructor(private store: Store, private router: Router) { }
 
   ngOnInit(): void {
-    this.facade.setEmployees();
-    this.subscriptionHelper.next = this.facade.getEmployees$().subscribe(employees => {
+    this.store.dispatch(getEmployees())
+    this.subscriptionHelper.next = this.store.select(selectAllEmployees).subscribe(employees => {
       this.employees = employees;
     });
-    this.subscriptionHelper.next = this.facade.getCurrentEmployee$().subscribe(employee => {
+    this.subscriptionHelper.next = this.store.select(selectCurrentEmployee).subscribe(employee => {
       this.employee = employee;
     });
   }
@@ -31,31 +35,33 @@ export class EmployeeListContainer implements OnInit, OnDestroy {
 
   openDetails(details: Employee) {
     this.setCurrentEmployee(details);
-    this.facade.openDetails(details.id);
+    this.router.navigateByUrl(ROUTER_LINKS.EMPLOYEES + `/${details.id}`);
   }
 
-  deleteEmployee(employee: Employee) {
-    this.facade.deleteEmployee(employee);
+  deleteEmployee(currentEmployee: Employee) {
+    this.store.dispatch(deleteEmployee({ currentEmployee }));
   }
 
   addEmployee() {
-    this.facade.addEmployee();
+    this.setCurrentEmployee(new Employee());
   }
 
-  setCurrentEmployee(employee: Employee) {
-    this.facade.setCurrentEmployee(employee);
+  setCurrentEmployee(currentEmployee: Employee) {
+    this.store.dispatch(setCurrentEmployee({ currentEmployee }));
   }
 
   cancel() {
-    this.facade.setCurrentEmployee(null);
+    this.setCurrentEmployee(null);
   }
 
-  createEmployee(employee: Employee) {
-    this.facade.createEmployee(employee);
+  createEmployee(currentEmployee: Employee) {
+    this.store.dispatch(createEmployee({ currentEmployee }));
+    this.setCurrentEmployee(null);
   }
 
-  editEmployee(employee: Employee) {
-    this.facade.editEmployee(employee);
+  editEmployee(currentEmployee: Employee) {
+    this.store.dispatch(editEmployee({ currentEmployee }));
+    this.setCurrentEmployee(null);
   }
 
   isCreationMode(): boolean {
