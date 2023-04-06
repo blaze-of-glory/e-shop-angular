@@ -1,8 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Provider } from '../../classes/provider';
-import { ProvidersFacade } from '../../providers.facade';
 import { Material } from '../../../materials/classes/material';
 import { SubscriptionHelper } from '../../../../shared/helpers/subscription.helper';
+import { Store } from '@ngrx/store';
+import { selectAllProviders, selectCurrentProvider } from '../../store/providers.selectors';
+import { createProvider, editProvider, getProviders, setCurrentProvider } from '../../store/providers.actions';
+import { Router } from '@angular/router';
+import { ROUTER_LINKS } from '../../../../shared/constants/router-links';
 
 @Component({
   selector: 'app-provider-list',
@@ -14,14 +18,14 @@ export class ProviderListContainer implements OnInit, OnDestroy {
   public provider: Provider = null;
   private readonly subscriptionHelper: SubscriptionHelper = new SubscriptionHelper();
 
-  constructor(private facade: ProvidersFacade) { }
+  constructor(private store: Store, private router: Router) { }
 
   ngOnInit(): void {
-    this.facade.setProviders();
-    this.subscriptionHelper.next = this.facade.getProviders$().subscribe(providers => {
+    this.store.dispatch(getProviders());
+    this.subscriptionHelper.next = this.store.select(selectAllProviders).subscribe(providers => {
       this.providers = providers;
     });
-    this.subscriptionHelper.next = this.facade.getCurrentProvider$().subscribe(provider => {
+    this.subscriptionHelper.next = this.store.select(selectCurrentProvider).subscribe(provider => {
       this.provider = provider;
     });
   }
@@ -31,23 +35,25 @@ export class ProviderListContainer implements OnInit, OnDestroy {
   }
 
   openMaterial(details: Material) {
-    this.facade.openMaterial(details.id);
+    this.router.navigateByUrl(ROUTER_LINKS.PROVIDERS + `/${details.id}`);
   }
 
   addProvider() {
-    this.facade.addProvider();
+    this.setCurrentProvider(new Provider());
   }
 
-  setCurrentProvider(provider: Provider) {
-    this.facade.setCurrentProvider(provider);
+  setCurrentProvider(currentProvider: Provider) {
+    this.store.dispatch(setCurrentProvider({ currentProvider }));
   }
 
-  createProvider(provider: Provider) {
-    this.facade.createProvider(provider);
+  createProvider(currentProvider: Provider) {
+    this.store.dispatch(createProvider({ currentProvider }));
+    this.setCurrentProvider(null);
   }
 
-  editProvider(provider: Provider) {
-    this.facade.editProvider(provider);
+  editProvider(currentProvider: Provider) {
+    this.store.dispatch(editProvider({ currentProvider }));
+    this.setCurrentProvider(null);
   }
 
   isCreationMode(): boolean {
@@ -55,6 +61,6 @@ export class ProviderListContainer implements OnInit, OnDestroy {
   }
 
   cancel() {
-    this.facade.setCurrentProvider(null);
+    this.setCurrentProvider(null);
   }
 }
