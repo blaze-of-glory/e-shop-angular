@@ -1,7 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Product } from '../../classes/product';
-import { ProductsFacade } from '../../products.facade';
 import { SubscriptionHelper } from '../../../../shared/helpers/subscription.helper';
+import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
+import { selectAllProducts, selectCurrentProduct, selectProductRelations } from '../../store/products.selectors';
+import { createProduct, deleteProduct, editProduct, getProducts, setCurrentProduct } from '../../store/products.actions';
+import { ROUTER_LINKS } from '../../../../shared/constants/router-links';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'product-list.container',
@@ -13,14 +18,19 @@ export class ProductListContainer implements OnInit, OnDestroy {
   public product: Product = null;
   private readonly subscriptionHelper: SubscriptionHelper = new SubscriptionHelper();
 
-  constructor(private facade: ProductsFacade) { }
+  constructor(private store: Store, private router: Router) { }
 
   ngOnInit(): void {
-    this.facade.setProducts();
-    this.subscriptionHelper.next = this.facade.getProducts$().subscribe(products => {
+    this.store.select(selectProductRelations)
+      .pipe(take(1))
+      .subscribe((relations: string[]) => {
+      const [relatedProviderId, relatedMaterialId] = relations;
+      this.store.dispatch(getProducts({ relatedProviderId, relatedMaterialId }))
+    });
+    this.subscriptionHelper.next = this.store.select(selectAllProducts).subscribe(products => {
       this.products = products;
     });
-    this.subscriptionHelper.next = this.facade.getCurrentProduct$().subscribe(product => {
+    this.subscriptionHelper.next = this.store.select(selectCurrentProduct).subscribe(product => {
       this.product = product;
     });
   }
@@ -31,27 +41,49 @@ export class ProductListContainer implements OnInit, OnDestroy {
 
   openDetails(details: Product) {
     this.setCurrentProduct(details);
-    this.facade.openDetails(details.id);
+    this.store.select(selectProductRelations)
+      .pipe(take(1))
+      .subscribe((relations: string[]) => {
+      const [relatedProviderId, relatedMaterialId] = relations;
+      this.router.navigateByUrl(ROUTER_LINKS.PROVIDERS + `/${relatedProviderId}/${relatedMaterialId}/${details.id}`)
+    });
   }
 
   addProduct() {
-    this.facade.addProduct();
+    this.setCurrentProduct(new Product());
   }
 
-  setCurrentProduct(product: Product) {
-    this.facade.setCurrentProduct(product);
+  setCurrentProduct(currentProduct: Product) {
+    this.store.dispatch(setCurrentProduct({ currentProduct }));
   }
 
-  createProduct(product: Product) {
-    this.facade.createProduct(product);
+  createProduct(currentProduct: Product) {
+    this.store.select(selectProductRelations)
+      .pipe(take(1))
+      .subscribe((relations: string[]) => {
+      const [relatedProviderId, relatedMaterialId] = relations;
+      this.store.dispatch(createProduct({ currentProduct, relatedProviderId, relatedMaterialId }));
+      this.setCurrentProduct(null);
+    });
   }
 
-  editProduct(product: Product) {
-    this.facade.editProduct(product);
+  editProduct(currentProduct: Product) {
+    this.store.select(selectProductRelations)
+      .pipe(take(1))
+      .subscribe((relations: string[]) => {
+      const [relatedProviderId, relatedMaterialId] = relations;
+      this.store.dispatch(editProduct({ currentProduct, relatedProviderId, relatedMaterialId }));
+      this.setCurrentProduct(null);
+    });
   }
 
-  deleteProduct(product: Product) {
-    this.facade.deleteProduct(product);
+  deleteProduct(currentProduct: Product) {
+    this.store.select(selectProductRelations)
+      .pipe(take(1))
+      .subscribe((relations: string[]) => {
+      const [relatedProviderId, relatedMaterialId] = relations;
+      this.store.dispatch(deleteProduct({ currentProduct, relatedProviderId, relatedMaterialId }))
+    });
   }
 
   isCreationMode(): boolean {
@@ -59,6 +91,6 @@ export class ProductListContainer implements OnInit, OnDestroy {
   }
 
   cancel() {
-    this.facade.setCurrentProduct(null);
+    this.setCurrentProduct(null);
   }
 }

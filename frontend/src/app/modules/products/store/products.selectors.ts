@@ -11,12 +11,7 @@ export const selectCurrentProduct = createSelector(
   (state: ProductsState) => state.currentProduct
 );
 
-export const selectRelatedProviderId = createSelector(
+export const selectProductRelations = createSelector(
   selectProductsState,
-  (state: ProductsState) => state.relatedProviderId
-);
-
-export const selectRelatedMaterialId = createSelector(
-  selectProductsState,
-  (state: ProductsState) => state.relatedMaterialId
+  (state: ProductsState) => [state.relatedProviderId, state.relatedMaterialId]
 );
