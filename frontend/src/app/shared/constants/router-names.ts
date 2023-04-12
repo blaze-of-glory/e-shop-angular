@@ -1,9 +1,7 @@
 export const ROUTER_NAMES = {
   HOME: '',
-  PROVIDERS: 'providers',
-  MATERIALS: 'providers/:provider',
-  PRODUCTS: 'providers/:provider/:material',
-  PRODUCT: 'providers/:provider/:material/:product',
+  PRODUCTS: 'products',
+  PRODUCT: 'products/:product',
   EMPLOYEES: 'employees',
   EMPLOYEE: 'employees/:employee',
   SHOPS: 'shops',

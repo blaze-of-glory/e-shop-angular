@@ -6,11 +6,7 @@ import { EmployeeListContainer } from './modules/employees/containers/employee-l
 import { CardDetailsResolver } from './shared/resolvers/card-details.resolver';
 import { CardDetailsContainer } from './shared/containers/card-details/card-details.container';
 import { ShopListContainer } from './modules/shops/containers/shop-list/shop-list.container';
-import { ProviderListContainer } from './modules/providers/containers/provider-list/provider-list.container';
-import { MaterialListContainer } from './modules/materials/containers/material-list.container/material-list.container';
 import { ProductListContainer } from './modules/products/containers/product-list.container/product-list.container';
-import { MaterialsResolver } from './modules/materials/materials.resolver';
-import { ProductsResolver } from './modules/products/products.resolver';
 
 const routes: Routes = [
   {
@@ -18,20 +14,8 @@ const routes: Routes = [
     component: HomeComponent
   },
   {
-    path: ROUTER_NAMES.PROVIDERS,
-    component: ProviderListContainer,
-    pathMatch: 'full',
-  },
-  {
-    path: ROUTER_NAMES.MATERIALS,
-    component: MaterialListContainer,
-    resolve: [MaterialsResolver],
-    pathMatch: 'full',
-  },
-  {
     path: ROUTER_NAMES.PRODUCTS,
     component: ProductListContainer,
-    resolve: [ProductsResolver],
     pathMatch: "full",
   },
   {

@@ -10,7 +10,7 @@ export class ProductsEffects {
   getProducts$ = createEffect(
     () => this.actions$.pipe(
       ofType(getProducts),
-      mergeMap((payload: { relatedProviderId: string, relatedMaterialId: string }) => this.api.getRelevantProducts(payload.relatedProviderId, payload.relatedMaterialId)
+      mergeMap(() => this.api.getAllProducts()
         .pipe(
           map(products => setProducts({ products }))
         )
@@ -32,9 +32,9 @@ export class ProductsEffects {
   createProduct$ = createEffect(
     () => this.actions$.pipe(
       ofType(createProduct),
-      concatMap((payload: { currentProduct: Product, relatedProviderId: string, relatedMaterialId: string }) => this.api.createProduct(payload.currentProduct, payload.relatedProviderId, payload.relatedMaterialId)
+      concatMap((payload: { currentProduct: Product }) => this.api.createProduct(payload.currentProduct)
         .pipe(
-          map(() => getProducts({ relatedProviderId: payload.relatedProviderId, relatedMaterialId: payload.relatedMaterialId }))
+          map(() => getProducts())
         )
       )
     )
@@ -43,9 +43,9 @@ export class ProductsEffects {
   editProduct$ = createEffect(
     () => this.actions$.pipe(
       ofType(editProduct),
-      concatMap((payload: { currentProduct: Product, relatedProviderId: string, relatedMaterialId: string }) => this.api.editProduct(payload.currentProduct.id, payload.currentProduct)
+      concatMap((payload: { currentProduct: Product }) => this.api.editProduct(payload.currentProduct.id, payload.currentProduct)
         .pipe(
-          map(() => getProducts({ relatedProviderId: payload.relatedProviderId, relatedMaterialId: payload.relatedMaterialId }))
+          map(() => getProducts())
         )
       )
     )
@@ -54,9 +54,9 @@ export class ProductsEffects {
   deleteProduct$ = createEffect(
     () => this.actions$.pipe(
       ofType(deleteProduct),
-      concatMap((payload: { currentProduct: Product, relatedProviderId: string, relatedMaterialId: string }) => this.api.deleteProduct(payload.currentProduct.id)
+      concatMap((payload: { currentProduct: Product }) => this.api.deleteProduct(payload.currentProduct.id)
         .pipe(
-          map(() => getProducts({ relatedProviderId: payload.relatedProviderId, relatedMaterialId: payload.relatedMaterialId }))
+          map(() => getProducts())
         )
       )
     )

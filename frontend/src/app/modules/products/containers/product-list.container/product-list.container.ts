@@ -3,10 +3,9 @@ import { Product } from '../../classes/product';
 import { SubscriptionHelper } from '../../../../shared/helpers/subscription.helper';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { selectAllProducts, selectCurrentProduct, selectProductRelations } from '../../store/products.selectors';
+import { selectAllProducts, selectCurrentProduct } from '../../store/products.selectors';
 import { createProduct, deleteProduct, editProduct, getProducts, setCurrentProduct } from '../../store/products.actions';
 import { ROUTER_LINKS } from '../../../../shared/constants/router-links';
-import { take } from 'rxjs';
 
 @Component({
   selector: 'product-list.container',
@@ -21,12 +20,7 @@ export class ProductListContainer implements OnInit, OnDestroy {
   constructor(private store: Store, private router: Router) { }
 
   ngOnInit(): void {
-    this.store.select(selectProductRelations)
-      .pipe(take(1))
-      .subscribe((relations: string[]) => {
-      const [relatedProviderId, relatedMaterialId] = relations;
-      this.store.dispatch(getProducts({ relatedProviderId, relatedMaterialId }))
-    });
+    this.store.dispatch(getProducts());
     this.subscriptionHelper.next = this.store.select(selectAllProducts).subscribe(products => {
       this.products = products;
     });
@@ -41,12 +35,7 @@ export class ProductListContainer implements OnInit, OnDestroy {
 
   openDetails(details: Product) {
     this.setCurrentProduct(details);
-    this.store.select(selectProductRelations)
-      .pipe(take(1))
-      .subscribe((relations: string[]) => {
-      const [relatedProviderId, relatedMaterialId] = relations;
-      this.router.navigateByUrl(ROUTER_LINKS.PROVIDERS + `/${relatedProviderId}/${relatedMaterialId}/${details.id}`)
-    });
+    this.router.navigateByUrl(ROUTER_LINKS.PRODUCTS + `/${details.id}`)
   }
 
   addProduct() {
@@ -58,32 +47,17 @@ export class ProductListContainer implements OnInit, OnDestroy {
   }
 
   createProduct(currentProduct: Product) {
-    this.store.select(selectProductRelations)
-      .pipe(take(1))
-      .subscribe((relations: string[]) => {
-      const [relatedProviderId, relatedMaterialId] = relations;
-      this.store.dispatch(createProduct({ currentProduct, relatedProviderId, relatedMaterialId }));
-      this.setCurrentProduct(null);
-    });
+    this.store.dispatch(createProduct({ currentProduct }));
+    this.setCurrentProduct(null);
   }
 
   editProduct(currentProduct: Product) {
-    this.store.select(selectProductRelations)
-      .pipe(take(1))
-      .subscribe((relations: string[]) => {
-      const [relatedProviderId, relatedMaterialId] = relations;
-      this.store.dispatch(editProduct({ currentProduct, relatedProviderId, relatedMaterialId }));
-      this.setCurrentProduct(null);
-    });
+    this.store.dispatch(editProduct({ currentProduct }));
+    this.setCurrentProduct(null);
   }
 
   deleteProduct(currentProduct: Product) {
-    this.store.select(selectProductRelations)
-      .pipe(take(1))
-      .subscribe((relations: string[]) => {
-      const [relatedProviderId, relatedMaterialId] = relations;
-      this.store.dispatch(deleteProduct({ currentProduct, relatedProviderId, relatedMaterialId }))
-    });
+    this.store.dispatch(deleteProduct({ currentProduct }))
   }
 
   isCreationMode(): boolean {

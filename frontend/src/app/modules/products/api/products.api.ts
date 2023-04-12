@@ -12,16 +12,16 @@ export class ProductsApi {
 
   constructor(private http: HttpClient) { }
 
-  getRelevantProducts(providerId: string, materialId: string): Observable<Product[]> {
-    return this.http.get<Product[]>(this.apiEndpoint + `/products/filter?providerId=${providerId}&materialId=${materialId}`);
+  getAllProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.apiEndpoint + `/products`);
   }
 
   getProductById(id: string): Observable<Product> {
     return this.http.get<Product>(this.apiEndpoint + `/products/${id}`);
   }
 
-  createProduct(productDetails: Product, providerId: string, materialId: string): Observable<Product> {
-    return this.http.post<Product>(this.apiEndpoint + '/products', { productDetails, providerId, materialId });
+  createProduct(productDetails: Product): Observable<Product> {
+    return this.http.post<Product>(this.apiEndpoint + '/products', productDetails);
   }
 
   editProduct(id: string, productDetails: any): Observable<Product> {
