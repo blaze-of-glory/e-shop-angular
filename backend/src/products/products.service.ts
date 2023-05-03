@@ -41,12 +41,8 @@ export class ProductsService {
     }
 
     public async createProduct(providerId: number, materialId: number, productDetails: ProductDetailsDto): Promise<Product> {
-        if (!Object.keys(productDetails).length) {
-            return null;
-        }
-
-        const provider = await this.providerRepository.findOneBy({ id: providerId });
-        const material = await this.materialRepository.findOneBy({ id: materialId });
+        const provider: Provider = await this.providerRepository.findOneBy({ id: providerId });
+        const material: Material = await this.materialRepository.findOneBy({ id: materialId });
 
         if (!provider || !material) {
             throw new HttpException(

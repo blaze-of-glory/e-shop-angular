@@ -18,10 +18,7 @@ export class ShopsService {
     }
 
     public createShop(shopDetails: ShopDto): Promise<Shop> {
-        if (!Object.keys(shopDetails).length) {
-            return null;
-        }
-        const newShop = this.shopRepository.create({ ...shopDetails });
+        const newShop: Shop = this.shopRepository.create({ ...shopDetails });
         return this.shopRepository.save(newShop);
     }
 

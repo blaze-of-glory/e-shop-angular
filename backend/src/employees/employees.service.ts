@@ -18,10 +18,7 @@ export class EmployeesService {
     }
 
     public createEmployee(employeeDetails: EmployeeDto): Promise<Employee> {
-        if (!Object.keys(employeeDetails).length) {
-            return;
-        }
-        const newEmployee = this.employeeRepository.create({ ...employeeDetails });
+        const newEmployee: Employee = this.employeeRepository.create({ ...employeeDetails });
         return this.employeeRepository.save(newEmployee);
     }
 

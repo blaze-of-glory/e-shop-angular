@@ -18,10 +18,7 @@ export class ProvidersService {
     }
 
     public createProvider(providerDetails: ProviderDto): Promise<Provider> {
-        if (!Object.keys(providerDetails).length) {
-            return null;
-        }
-        const newProvider = this.providerRepository.create({ ...providerDetails });
+        const newProvider: Provider = this.providerRepository.create({ ...providerDetails });
         return this.providerRepository.save(newProvider);
     }
 

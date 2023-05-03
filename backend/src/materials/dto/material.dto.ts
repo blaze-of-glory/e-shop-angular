@@ -1,11 +1,4 @@
-import { IsInt, IsString, IsUrl } from 'class-validator';
-
-export class MaterialDto {
-    @IsInt()
-    providerId: number;
-
-    materialDetails: MaterialDetailsDto;
-}
+import { IsInt, IsString, IsUrl, IsNotEmptyObject } from 'class-validator';
 
 export class MaterialDetailsDto {
     @IsUrl()
@@ -16,4 +9,12 @@ export class MaterialDetailsDto {
 
     @IsString()
     description: string;
+}
+
+export class MaterialDto {
+    @IsInt()
+    providerId: number;
+
+    @IsNotEmptyObject()
+    materialDetails: MaterialDetailsDto;
 }

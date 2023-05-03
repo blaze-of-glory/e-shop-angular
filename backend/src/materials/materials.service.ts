@@ -49,11 +49,7 @@ export class MaterialsService {
     }
 
     public async createMaterial(id: number, materialDetails: MaterialDetailsDto): Promise<Material> {
-        if (!Object.keys(materialDetails).length) {
-            return null;
-        }
-
-        const provider = await this.providerRepository.findOneBy({ id });
+        const provider: Provider = await this.providerRepository.findOneBy({ id });
 
         if (!provider) {
             throw new HttpException(
