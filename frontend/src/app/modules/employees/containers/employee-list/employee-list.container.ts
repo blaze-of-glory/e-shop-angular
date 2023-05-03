@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Employee } from '../../classes/employee';
-import { SubscriptionHelper } from '../../../../shared/helpers/subscription.helper';
+import { SubscriptionsService } from '../../../../shared/services/subscriptions.service';
 import { Store } from '@ngrx/store';
 import { createEmployee, deleteEmployee, editEmployee, getEmployees, setCurrentEmployee } from '../../store/employees.actions';
 import { selectAllEmployees, selectCurrentEmployee } from '../../store/employees.selectors';
@@ -15,22 +15,21 @@ import { ROUTER_LINKS } from '../../../../shared/constants/router-links';
 export class EmployeeListContainer implements OnInit, OnDestroy {
   public employees: Employee[] = null;
   public employee: Employee = null;
-  private readonly subscriptionHelper: SubscriptionHelper = new SubscriptionHelper();
 
-  constructor(private store: Store, private router: Router) { }
+  constructor(private store: Store, private router: Router, private subscriptionsService: SubscriptionsService) { }
 
   ngOnInit(): void {
     this.store.dispatch(getEmployees())
-    this.subscriptionHelper.next = this.store.select(selectAllEmployees).subscribe(employees => {
+    this.subscriptionsService.next = this.store.select(selectAllEmployees).subscribe(employees => {
       this.employees = employees;
     });
-    this.subscriptionHelper.next = this.store.select(selectCurrentEmployee).subscribe(employee => {
+    this.subscriptionsService.next = this.store.select(selectCurrentEmployee).subscribe(employee => {
       this.employee = employee;
     });
   }
 
   ngOnDestroy(): void {
-    this.subscriptionHelper.unsubscribeAll();
+    this.subscriptionsService.unsubscribeAll();
   }
 
   openDetails(details: Employee) {

@@ -1,6 +1,8 @@
 import { Subscription } from 'rxjs';
+import { Injectable } from '@angular/core';
 
-export class SubscriptionHelper {
+@Injectable()
+export class SubscriptionsService {
     private subscriptions: Array<Subscription | (() => void)> = [];
 
     public set next(subscription: Subscription | (() => void)) {

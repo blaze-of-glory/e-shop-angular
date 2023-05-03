@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Material } from '../../classes/material';
-import { SubscriptionHelper } from '../../../../shared/helpers/subscription.helper';
+import { SubscriptionsService } from '../../../../shared/services/subscriptions.service';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { selectAllMaterials, selectCurrentMaterial, selectRelatedProviderId } from '../../store/materials.selectors';
@@ -16,24 +16,23 @@ import { ROUTER_LINKS } from '../../../../shared/constants/router-links';
 export class MaterialListContainer implements OnInit, OnDestroy {
   public materials: Material[] = null;
   public material: Material = null;
-  private readonly subscriptionHelper: SubscriptionHelper = new SubscriptionHelper();
 
-  constructor(private store: Store, private router: Router) { }
+  constructor(private store: Store, private router: Router, private subscriptionsService: SubscriptionsService) { }
 
   ngOnInit(): void {
-    this.subscriptionHelper.next = this.store.select(selectRelatedProviderId).subscribe(relatedProviderId => {
+    this.subscriptionsService.next = this.store.select(selectRelatedProviderId).subscribe(relatedProviderId => {
         this.store.dispatch(getMaterials({ relatedProviderId }));
       });
-    this.subscriptionHelper.next = this.store.select(selectAllMaterials).subscribe(materials => {
+    this.subscriptionsService.next = this.store.select(selectAllMaterials).subscribe(materials => {
       this.materials = materials;
     });
-    this.subscriptionHelper.next = this.store.select(selectCurrentMaterial).subscribe(material => {
+    this.subscriptionsService.next = this.store.select(selectCurrentMaterial).subscribe(material => {
       this.material = material;
     });
   }
 
   ngOnDestroy(): void {
-    this.subscriptionHelper.unsubscribeAll();
+    this.subscriptionsService.unsubscribeAll();
   }
 
   openMaterial(details: Material) {

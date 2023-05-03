@@ -8,10 +8,12 @@ import { CardDetailsComponent } from './components/card-details/card-details.com
 import { CardDetailsContainer } from './containers/card-details/card-details.container';
 import { ManipulatorComponent } from './components/manipulator/manipulator.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SubscriptionsService } from './services/subscriptions.service';
 
 
 
 @NgModule({
+  providers: [SubscriptionsService],
   declarations: [
     HeaderComponent,
     FooterComponent,
@@ -20,17 +22,17 @@ import { ReactiveFormsModule } from '@angular/forms';
     CardDetailsContainer,
     ManipulatorComponent
   ],
-    exports: [
+  exports: [
         HeaderComponent,
         FooterComponent,
         CardComponent,
         ManipulatorComponent
-    ],
-    imports: [
+  ],
+  imports: [
         CommonModule,
         RouterLink,
         RouterLink,
         ReactiveFormsModule
-    ]
+  ]
 })
 export class SharedModule { }

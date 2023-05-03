@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HomeFacade } from '../../home.facade';
 import { AboutUs } from '../../interfaces/about-us';
-import { SubscriptionHelper } from '../../../../shared/helpers/subscription.helper';
+import { SubscriptionsService } from '../../../../shared/services/subscriptions.service';
 
 @Component({
   selector: 'app-home',
@@ -11,15 +11,15 @@ import { SubscriptionHelper } from '../../../../shared/helpers/subscription.help
 export class HomeComponent implements OnInit, OnDestroy {
 
   public aboutUs: AboutUs = null;
-  private readonly subscriptionHelper: SubscriptionHelper = new SubscriptionHelper();
-  constructor(private facade: HomeFacade) { }
+
+  constructor(private facade: HomeFacade, private subscriptionsService: SubscriptionsService) { }
 
   ngOnInit(): void {
     this.facade.loadAboutUs$();
-    this.subscriptionHelper.next = this.facade.getAboutUs$().subscribe(aboutUs => this.aboutUs = aboutUs);
+    this.subscriptionsService.next = this.facade.getAboutUs$().subscribe(aboutUs => this.aboutUs = aboutUs);
   }
 
   ngOnDestroy(): void {
-    this.subscriptionHelper.unsubscribeAll();
+    this.subscriptionsService.unsubscribeAll();
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Shop } from '../../classes/shop';
-import { SubscriptionHelper } from '../../../../shared/helpers/subscription.helper';
+import { SubscriptionsService } from '../../../../shared/services/subscriptions.service';
 import { Store } from '@ngrx/store';
 import { createShop, deleteShop, editShop, getShops, setCurrentShop } from '../../store/shops.actions';
 import { selectAllShops, selectCurrentShop } from '../../store/shops.selectors';
@@ -13,22 +13,21 @@ import { selectAllShops, selectCurrentShop } from '../../store/shops.selectors';
 export class ShopListContainer implements OnInit, OnDestroy {
   public shops: Shop[] = null;
   public shop: Shop = null;
-  private readonly subscriptionHelper: SubscriptionHelper = new SubscriptionHelper();
 
-  constructor(private store: Store) { }
+  constructor(private store: Store, private subscriptionsService: SubscriptionsService) { }
 
   ngOnInit(): void {
     this.store.dispatch(getShops());
-    this.subscriptionHelper.next = this.store.select(selectAllShops).subscribe(shops => {
+    this.subscriptionsService.next = this.store.select(selectAllShops).subscribe(shops => {
       this.shops = shops;
     });
-    this.subscriptionHelper.next = this.store.select(selectCurrentShop).subscribe(shop => {
+    this.subscriptionsService.next = this.store.select(selectCurrentShop).subscribe(shop => {
       this.shop = shop;
     });
   }
 
   ngOnDestroy(): void {
-    this.subscriptionHelper.unsubscribeAll();
+    this.subscriptionsService.unsubscribeAll();
   }
 
   addShop() {

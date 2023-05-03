@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Product } from '../../classes/product';
-import { SubscriptionHelper } from '../../../../shared/helpers/subscription.helper';
+import { SubscriptionsService } from '../../../../shared/services/subscriptions.service';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { selectAllProducts, selectCurrentProduct, selectProductRelations } from '../../store/products.selectors';
@@ -16,9 +16,8 @@ import { take } from 'rxjs';
 export class ProductListContainer implements OnInit, OnDestroy {
   public products: Product[] = null;
   public product: Product = null;
-  private readonly subscriptionHelper: SubscriptionHelper = new SubscriptionHelper();
 
-  constructor(private store: Store, private router: Router) { }
+  constructor(private store: Store, private router: Router, private subscriptionsService: SubscriptionsService) { }
 
   ngOnInit(): void {
     this.store.select(selectProductRelations)
@@ -27,16 +26,16 @@ export class ProductListContainer implements OnInit, OnDestroy {
       const [relatedProviderId, relatedMaterialId] = relations;
       this.store.dispatch(getProducts({ relatedProviderId, relatedMaterialId }))
     });
-    this.subscriptionHelper.next = this.store.select(selectAllProducts).subscribe(products => {
+    this.subscriptionsService.next = this.store.select(selectAllProducts).subscribe(products => {
       this.products = products;
     });
-    this.subscriptionHelper.next = this.store.select(selectCurrentProduct).subscribe(product => {
+    this.subscriptionsService.next = this.store.select(selectCurrentProduct).subscribe(product => {
       this.product = product;
     });
   }
 
   ngOnDestroy(): void {
-    this.subscriptionHelper.unsubscribeAll();
+    this.subscriptionsService.unsubscribeAll();
   }
 
   openDetails(details: Product) {
