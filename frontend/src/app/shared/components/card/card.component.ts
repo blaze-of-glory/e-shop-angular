@@ -21,15 +21,15 @@ export class CardComponent {
   @Output() editEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output() deleteEvent: EventEmitter<any> = new EventEmitter<any>();
 
-  openDetails(details: Employee | Provider | Material | Product) {
+  openDetails<Type>(details: Type) {
     this.openDetailsEvent.emit(details);
   }
 
-  edit(card: Employee | Shop | Provider | Material | Product) {
+  edit<Type>(card: Type) {
     this.editEvent.emit(card);
   }
 
-  delete(card: any) {
+  delete<Type>(card: Type) {
     this.deleteEvent.emit(card);
   }
 }
