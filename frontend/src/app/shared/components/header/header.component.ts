@@ -9,6 +9,4 @@ import { ROUTER_LINKS } from '../../constants/router-links';
 export class HeaderComponent {
 
   public readonly ROUTER_LINKS = ROUTER_LINKS;
-
-  constructor() { }
 }
