@@ -1,10 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Employee } from '../../../modules/employees/classes/employee';
 import { Shop } from '../../../modules/shops/classes/shop';
 import { Provider } from '../../../modules/providers/classes/provider';
 import { Material } from '../../../modules/materials/classes/material';
 import { Product } from '../../../modules/products/classes/product';
+import { ManipulatorFormStrategy } from '../../interfaces/manipulator-form-strategy.interface';
+import { manipulatorFormStrategyMapping } from '../../constants/manipulator-form-strategy-mapping';
+import { ManipulatorFormStrategyMapping, Instances } from '../../types/types';
 
 @Component({
   selector: 'app-manipulator',
@@ -27,70 +30,16 @@ export class ManipulatorComponent implements OnInit {
   title: string;
   recordId: string;
 
-  constructor(private fb: FormBuilder ) { }
-
   ngOnInit(): void {
-    switch (true) {
-      case !!this.employee: {
-        this.form = this.fb.group({
-          img: [this.employee.img, [Validators.required]],
-          name: [this.employee.name, [Validators.required]],
-          surname: [this.employee.surname, [Validators.required]],
-          age: [this.employee.age, [Validators.required]],
-          position: [this.employee.position, [Validators.required]],
-          salary: [this.employee.salary, [Validators.required]]
-        });
-        this.creationMode ? this.title = 'Создание сотрудника' : this.title = 'Редактирование сотрудника';
-        this.creationMode ? this.recordId = null : this.recordId = this.employee.id;
-        break;
-      }
-      case !!this.shop: {
-        this.form = this.fb.group({
-          img: [this.shop.img, [Validators.required]],
-          address: [this.shop.address, [Validators.required]],
-          openTime: [this.shop.openTime, [Validators.required]],
-          closeTime: [this.shop.closeTime, [Validators.required]]
-        });
-        this.creationMode ? this.title = 'Создание магазина' : this.title = 'Редактирование магазина';
-        this.creationMode ? this.recordId = null : this.recordId = this.shop.id;
-        break;
-      }
-      case !!this.provider: {
-        this.form = this.fb.group({
-          img: [this.provider.img, [Validators.required]],
-          title: [this.provider.title, [Validators.required]],
-          subtitle: [this.provider.subtitle, [Validators.required]],
-          description: [this.provider.description, [Validators.required]],
-          foundingDate: [this.provider.foundingDate, [Validators.required]]
-        });
-        this.creationMode ? this.title = 'Создание поставщика' : this.title = 'Редактирование поставщика';
-        this.creationMode ? this.recordId = null : this.recordId = this.provider.id;
-        break;
-      }
-      case !!this.material: {
-        this.form = this.fb.group({
-          img: [this.material.img, [Validators.required]],
-          title: [this.material.title, [Validators.required]],
-          description: [this.material.description, [Validators.required]]
-        });
-        this.creationMode ? this.title = 'Создание материала' : this.title = 'Редактирование материала';
-        this.creationMode ? this.recordId = null : this.recordId = this.material.id;
-        break;
-      }
-      case !!this.product: {
-        this.form = this.fb.group({
-          img: [this.product.img, [Validators.required]],
-          title: [this.product.title, [Validators.required]],
-          description: [this.product.description, [Validators.required]],
-          type: [this.product.type, [Validators.required]],
-          weight: [this.product.weight, [Validators.required]],
-          cost: [this.product.cost, [Validators.required]]
-        });
-        this.creationMode ? this.title = 'Создание товара' : this.title = 'Редактирование товара';
-        this.creationMode ? this.recordId = null : this.recordId = this.product.id;
-        break;
-      }
-    }
+    const key: string = Object.keys(manipulatorFormStrategyMapping).find((key: string) => this[key as keyof ManipulatorComponent]);
+    if (!key) return;
+
+    const data: Instances = this[key as keyof ManipulatorComponent] as Instances;
+    const strategy: ManipulatorFormStrategy<Instances> = new manipulatorFormStrategyMapping[key as keyof ManipulatorFormStrategyMapping].strategy;
+    this.title = this.creationMode ? manipulatorFormStrategyMapping[key as keyof ManipulatorFormStrategyMapping].creationTitle : manipulatorFormStrategyMapping[key as keyof ManipulatorFormStrategyMapping].editTitle;
+    this.recordId = this.creationMode ? null : data.id;
+
+    if (strategy) this.form = strategy.createForm(data);
   }
 
   manipulate() {
@@ -98,7 +47,6 @@ export class ManipulatorComponent implements OnInit {
   }
 
   cancel() {
-    this.form.reset();
     this.cancelEvent.emit(true);
   }
 }
