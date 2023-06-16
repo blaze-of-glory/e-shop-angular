@@ -5,8 +5,6 @@ import { AppComponent } from './app.component';
 import { HomeModule } from "./modules/home/home.module";
 import { SharedModule } from "./shared/shared.module";
 import { HttpClientModule } from "@angular/common/http";
-import { EmployeesModule } from './modules/employees/employees.module';
-import { ShopsModule } from './modules/shops/shops.module';
 import { ProvidersModule } from './modules/providers/providers.module';
 import { MaterialsModule } from './modules/materials/materials.module';
 import { ProductsModule } from './modules/products/products.module';
@@ -28,8 +26,6 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     ProvidersModule,
     MaterialsModule,
     ProductsModule,
-    EmployeesModule,
-    ShopsModule,
     SharedModule,
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot(effects),

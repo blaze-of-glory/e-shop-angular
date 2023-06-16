@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ShopListContainer } from './containers/shop-list/shop-list.container';
 import { SharedModule } from '../../shared/shared.module';
+import { ShopsRoutingModule } from "./shops-routing.module";
 
 
 
@@ -11,6 +12,7 @@ import { SharedModule } from '../../shared/shared.module';
   ],
   imports: [
     CommonModule,
+    ShopsRoutingModule,
     SharedModule
   ]
 })
