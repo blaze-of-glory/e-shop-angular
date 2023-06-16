@@ -34,7 +34,7 @@ export class EmployeeListContainer implements OnInit, OnDestroy {
 
   openDetails(details: Employee) {
     this.setCurrentEmployee(details);
-    this.router.navigateByUrl(ROUTER_LINKS.EMPLOYEES + `/${details.id}`);
+    void this.router.navigateByUrl(ROUTER_LINKS.EMPLOYEES + `/${details.id}`);
   }
 
   deleteEmployee(currentEmployee: Employee) {

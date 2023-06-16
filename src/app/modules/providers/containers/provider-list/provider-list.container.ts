@@ -34,7 +34,7 @@ export class ProviderListContainer implements OnInit, OnDestroy {
   }
 
   openMaterial(details: Material) {
-    this.router.navigateByUrl(ROUTER_LINKS.PROVIDERS + `/${details.id}`);
+    void this.router.navigateByUrl(ROUTER_LINKS.PROVIDERS + `/${details.id}`);
   }
 
   addProvider() {

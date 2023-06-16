@@ -39,7 +39,7 @@ export class MaterialListContainer implements OnInit, OnDestroy {
     this.store.select(selectRelatedProviderId)
       .pipe(take(1))
       .subscribe(relatedProviderId => {
-        this.router.navigateByUrl(ROUTER_LINKS.PROVIDERS + `/${relatedProviderId}/${details.id}`);
+        void this.router.navigateByUrl(ROUTER_LINKS.PROVIDERS + `/${relatedProviderId}/${details.id}`);
       });
   }
 

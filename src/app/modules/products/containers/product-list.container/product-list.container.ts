@@ -44,7 +44,7 @@ export class ProductListContainer implements OnInit, OnDestroy {
       .pipe(take(1))
       .subscribe((relations: string[]) => {
       const [relatedProviderId, relatedMaterialId] = relations;
-      this.router.navigateByUrl(ROUTER_LINKS.PROVIDERS + `/${relatedProviderId}/${relatedMaterialId}/${details.id}`)
+      void this.router.navigateByUrl(ROUTER_LINKS.PROVIDERS + `/${relatedProviderId}/${relatedMaterialId}/${details.id}`)
     });
   }
 
