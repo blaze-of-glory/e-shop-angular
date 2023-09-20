@@ -7,11 +7,11 @@ import {Provider} from "../../modules/providers/classes/provider";
 import {Material} from "../../modules/materials/classes/material";
 import {Product} from "../../modules/products/classes/product";
 
-describe('EmployeeFormStrategy', () => {
+describe('EmployeeFormStrategy', function () {
   let service: EmployeeFormStrategy;
   let fb: FormBuilder;
 
-  beforeEach(() => {
+  beforeEach(function () {
     TestBed.configureTestingModule({
       providers: [EmployeeFormStrategy]
     });
@@ -19,8 +19,8 @@ describe('EmployeeFormStrategy', () => {
     fb = new FormBuilder();
   });
 
-  it('should create employee form', () => {
-    const employee : Employee = {
+  it('should create employee form', function () {
+    const employee: Employee = {
       img: 'test',
       name: 'test',
       surname: 'test',
@@ -54,11 +54,11 @@ describe('EmployeeFormStrategy', () => {
   });
 });
 
-describe('ShopFormStrategy', () => {
+describe('ShopFormStrategy', function () {
   let service: ShopFormStrategy;
   let fb: FormBuilder;
 
-  beforeEach(() => {
+  beforeEach(function () {
     TestBed.configureTestingModule({
       providers: [ShopFormStrategy]
     });
@@ -66,8 +66,8 @@ describe('ShopFormStrategy', () => {
     fb = new FormBuilder();
   });
 
-  it('should create shop form', () => {
-    const shop : Shop = {
+  it('should create shop form', function () {
+    const shop: Shop = {
       img: 'test',
       address: 'test',
       closeTime: '21:00',
@@ -93,11 +93,11 @@ describe('ShopFormStrategy', () => {
   });
 });
 
-describe('ProviderFormStrategy', () => {
+describe('ProviderFormStrategy', function () {
   let service: ProviderFormStrategy;
   let fb: FormBuilder;
 
-  beforeEach(() => {
+  beforeEach(function () {
     TestBed.configureTestingModule({
       providers: [ProviderFormStrategy]
     });
@@ -105,8 +105,8 @@ describe('ProviderFormStrategy', () => {
     fb = new FormBuilder();
   });
 
-  it('should create provider form', () => {
-    const provider : Provider = {
+  it('should create provider form', function () {
+    const provider: Provider = {
       img: 'test',
       description: 'test',
       title: 'test',
@@ -136,11 +136,11 @@ describe('ProviderFormStrategy', () => {
   });
 });
 
-describe('MaterialFormStrategy', () => {
+describe('MaterialFormStrategy', function () {
   let service: MaterialFormStrategy;
   let fb: FormBuilder;
 
-  beforeEach(() => {
+  beforeEach(function () {
     TestBed.configureTestingModule({
       providers: [MaterialFormStrategy]
     });
@@ -148,8 +148,8 @@ describe('MaterialFormStrategy', () => {
     fb = new FormBuilder();
   });
 
-  it('should create material form', () => {
-    const material : Material = {
+  it('should create material form', function () {
+    const material: Material = {
       img: 'test',
       description: 'test',
       title: 'test'
@@ -171,11 +171,11 @@ describe('MaterialFormStrategy', () => {
   });
 });
 
-describe('ProductFormStrategy', () => {
+describe('ProductFormStrategy', function () {
   let service: ProductFormStrategy;
   let fb: FormBuilder;
 
-  beforeEach(() => {
+  beforeEach(function () {
     TestBed.configureTestingModule({
       providers: [ProductFormStrategy]
     });
@@ -183,8 +183,8 @@ describe('ProductFormStrategy', () => {
     fb = new FormBuilder();
   });
 
-  it('should create product form', () => {
-    const product : Pick<Product, 'img' | 'description' | 'title' | 'cost' | 'weight' | 'type'> = {
+  it('should create product form', function () {
+    const product: Pick<Product, 'img' | 'description' | 'title' | 'cost' | 'weight' | 'type'> = {
       img: 'test',
       description: 'test',
       title: 'test',
